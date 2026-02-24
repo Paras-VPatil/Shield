@@ -1,0 +1,749 @@
+{
+  "users": [
+    {
+      "id": "0717e18f-23cd-494d-9dc9-a878de1678f4",
+      "username": "workflow_user",
+      "password_salt": "997447d19599bb29",
+      "password_hash": "a1285929d99b5565d0fad0f5a92ff9fdbff3e295427cf7ef1423f0dbe2e52d69",
+      "created_at": "2026-02-20T14:26:11.212370+00:00"
+    },
+    {
+      "id": "bb13ce70-aef4-40c7-b80b-49797cac2627",
+      "username": "workflow_user2",
+      "password_salt": "e1b25903c496dcdc",
+      "password_hash": "6a6abae260ca903f44d0e8af270aec40d313e3cf1339ff9f6d09f4bc324f3342",
+      "created_at": "2026-02-20T14:26:45.422436+00:00"
+    },
+    {
+      "id": "c5d8728e-8439-42f6-8d4d-c861ae54773b",
+      "username": "run_demo_user",
+      "password_salt": "6f9f30f1174c443c",
+      "password_hash": "11ee5e2a6c81b8a51d629b461deee5727de2fa7a53281503c97ae4a61b47e5ad",
+      "created_at": "2026-02-20T14:33:16.357027+00:00"
+    },
+    {
+      "id": "cbc99586-c6f2-418e-9745-6b1e17a63f19",
+      "username": "try124",
+      "password_salt": "bd1796d966eaba5c",
+      "password_hash": "bf498261bd284c14c7f0fe8f0250dcfa6c26b4f3df809cf812e686c49eff1861",
+      "created_at": "2026-02-20T14:35:40.262462+00:00"
+    },
+    {
+      "id": "dd97ddfb-6d8f-4d93-9fd6-0c925bd46b56",
+      "username": "ui_feature_user",
+      "password_salt": "6f783800e8eefbb6",
+      "password_hash": "2b7bd0b4563ff5caf532cba627284c2dc9b316b61abbdb668ecb2b3d339e3ba5",
+      "created_at": "2026-02-20T14:55:08.055732+00:00"
+    },
+    {
+      "id": "696049a9-bd06-475f-bd36-9e817191e5f3",
+      "username": "auth_fix_user",
+      "password_salt": "972b478b8071966d",
+      "password_hash": "9e9cf02add24d379f011ec8b249467d16e678565451b99ac07985bc6f9719f79",
+      "created_at": "2026-02-20T14:58:02.798442+00:00"
+    },
+    {
+      "id": "fa55cc01-ed35-4c43-8243-2d374e23eeaf",
+      "username": "new_user_a1",
+      "password_salt": "2026770d771ce5bf",
+      "password_hash": "19ccefc35de3c9dbb3fec4506d597138f3cfe7c59dea156bf68b4ea175ca1203",
+      "created_at": "2026-02-20T15:16:47.275372+00:00"
+    },
+    {
+      "id": "84968f7e-9f47-4a7e-a607-079ea28366dc",
+      "username": "new_user_b2",
+      "password_salt": "228f0ecba5b986e5",
+      "password_hash": "99bdac16e4610c965afda0445e6bff916caf3a82baa40551880956212b4a7aaa",
+      "created_at": "2026-02-20T15:16:47.300710+00:00"
+    },
+    {
+      "id": "f3ab7bd6-e324-4121-8722-5c5a8634294d",
+      "username": "new_user_c3",
+      "password_salt": "61fc404dbcb8f3e5",
+      "password_hash": "f3b079ec97289b3cda26ce49a86f19a53b9a4b7b317c599f7f162bd5e05f7789",
+      "created_at": "2026-02-20T15:16:47.360039+00:00"
+    },
+    {
+      "id": "f0032ce9-8fc3-4c0b-936b-cc679eeba2ac",
+      "username": "fresh_user_991",
+      "password_salt": "e39bdd1fb9280907",
+      "password_hash": "0cf70467d2ed94211202a065973ec039d1facef1ec3b4a172d9988023545d27a",
+      "created_at": "2026-02-20T15:18:12.745358+00:00"
+    }
+  ],
+  "meetings": [
+    {
+      "id": "b03c0728-2b31-443d-947d-678a308c0185",
+      "title": "Discovery Call",
+      "owner_id": "0717e18f-23cd-494d-9dc9-a878de1678f4",
+      "created_at": "2026-02-20T14:26:11.238135+00:00",
+      "updated_at": "2026-02-20T14:26:12.215176+00:00",
+      "domains": [
+        "healthcare"
+      ],
+      "minutes": [
+        {
+          "id": "ee4efb8e-868e-4b84-b4cb-1b52982403c4",
+          "source": "text",
+          "text": "Healthcare app for patient records with doctor login and AI analytics.",
+          "created_at": "2026-02-20T14:26:11.819447+00:00"
+        },
+        {
+          "id": "1b0c404a-57d5-46ae-829e-f2d7aa6def65",
+          "source": "text",
+          "text": "Decision: We will use Google OAuth and Microsoft OAuth. Doctors are read-only. Must follow HIPAA and FHIR.",
+          "created_at": "2026-02-20T14:26:12.215176+00:00"
+        }
+      ],
+      "analysis_history": [
+        {
+          "id": "38fbcfed-f150-453a-ac52-a5146462a115",
+          "created_at": "2026-02-20T14:26:11.819447+00:00",
+          "input_text": "Healthcare app for patient records with doctor login and AI analytics.\nPM: We need secure access and role based controls.\nDoctor: I need to view and maybe update records quickly.",
+          "analysis": {
+            "status": "gap_detected",
+            "message": "Analyzed 3 requirement(s). Overall status: gap_detected.",
+            "domains": [
+              "healthcare"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "What specific patient information will be displayed?",
+              "Which OAuth providers will be supported?",
+              "What permissions are assigned to user, doctor, and admin roles?",
+              "What healthcare data privacy standards must be followed?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "What specific patient information will be displayed?",
+              "Which OAuth providers will be supported?",
+              "What permissions are assigned to user, doctor, and admin roles?",
+              "What healthcare data privacy standards must be followed?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ]
+          }
+        },
+        {
+          "id": "07c674b6-cdb7-49c6-b7e5-9863ed914cbc",
+          "created_at": "2026-02-20T14:26:12.215176+00:00",
+          "input_text": "Decision: We will use Google OAuth and Microsoft OAuth. Doctors are read-only. Must follow HIPAA and FHIR.",
+          "analysis": {
+            "status": "gap_detected",
+            "message": "Analyzed 3 requirement(s). Overall status: gap_detected.",
+            "domains": [
+              "healthcare"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "What specific patient information will be displayed?",
+              "Which OAuth providers will be supported?",
+              "What permissions are assigned to user, doctor, and admin roles?",
+              "What healthcare data privacy standards must be followed?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ]
+          }
+        }
+      ],
+      "open_questions": [
+        "Who is the primary actor performing this requirement?",
+        "What exact action should be performed?",
+        "What system component or entity is affected by this action?",
+        "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+        "How should session timeout, refresh, and logout invalidation be handled?",
+        "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+        "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+        "What specific patient information will be displayed?",
+        "Which OAuth providers will be supported?",
+        "What permissions are assigned to user, doctor, and admin roles?",
+        "What healthcare data privacy standards must be followed?",
+        "What AI analytics capabilities are required?",
+        "Which clinical workflows are in scope for this release?",
+        "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+        "What audit trail depth is required for patient data changes?"
+      ],
+      "resolved_questions": [],
+      "speaker_notes": [
+        {
+          "id": "f1193db6-8715-4c92-97ea-aaf7173274ca",
+          "speaker": "PM",
+          "text": "We need secure access and role based controls.",
+          "created_at": "2026-02-20T14:26:11.819447+00:00"
+        },
+        {
+          "id": "80e75295-f787-4fce-acc3-b73b31f4a19d",
+          "speaker": "Doctor",
+          "text": "I need to view and maybe update records quickly.",
+          "created_at": "2026-02-20T14:26:11.819447+00:00"
+        }
+      ]
+    },
+    {
+      "id": "8e455779-6655-4ba0-a87b-7c7bb85d4048",
+      "title": "Discovery Call",
+      "owner_id": "bb13ce70-aef4-40c7-b80b-49797cac2627",
+      "created_at": "2026-02-20T14:26:45.446459+00:00",
+      "updated_at": "2026-02-20T14:26:46.418319+00:00",
+      "domains": [
+        "healthcare"
+      ],
+      "minutes": [
+        {
+          "id": "418a2f6f-f8f0-4ab9-a1d9-fecd51d65b27",
+          "source": "text",
+          "text": "Healthcare app for patient records with doctor login and AI analytics.",
+          "created_at": "2026-02-20T14:26:45.966103+00:00"
+        },
+        {
+          "id": "acfcc6e3-61c0-4d63-87ba-bf86468e1c80",
+          "source": "text",
+          "text": "Decision: We will use Google OAuth and Microsoft OAuth. Doctors are read-only. Must follow HIPAA and FHIR.",
+          "created_at": "2026-02-20T14:26:46.418319+00:00"
+        }
+      ],
+      "analysis_history": [
+        {
+          "id": "3f0e5d1f-29cb-4d3d-8c8c-eb5ad5f96289",
+          "created_at": "2026-02-20T14:26:45.966103+00:00",
+          "input_text": "Healthcare app for patient records with doctor login and AI analytics.",
+          "analysis": {
+            "status": "gap_detected",
+            "message": "Analyzed 1 requirement(s). Overall status: gap_detected.",
+            "domains": [
+              "healthcare"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "What specific patient information will be displayed?",
+              "Which OAuth providers will be supported?",
+              "What permissions are assigned to user, doctor, and admin roles?",
+              "Can doctors modify medical records?",
+              "What healthcare data privacy standards must be followed?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "What specific patient information will be displayed?",
+              "Which OAuth providers will be supported?",
+              "What permissions are assigned to user, doctor, and admin roles?",
+              "Can doctors modify medical records?",
+              "What healthcare data privacy standards must be followed?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ]
+          }
+        },
+        {
+          "id": "ecf913e7-4c34-4798-8c4f-0d3725248b77",
+          "created_at": "2026-02-20T14:26:46.418319+00:00",
+          "input_text": "Decision: We will use Google OAuth and Microsoft OAuth. Doctors are read-only. Must follow HIPAA and FHIR.",
+          "analysis": {
+            "status": "gap_detected",
+            "message": "Analyzed 3 requirement(s). Overall status: gap_detected.",
+            "domains": [
+              "healthcare"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ],
+            "resolved_now": [
+              "Which OAuth providers will be supported?",
+              "What permissions are assigned to user, doctor, and admin roles?",
+              "Can doctors modify medical records?",
+              "What healthcare data privacy standards must be followed?"
+            ],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "What specific patient information will be displayed?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?"
+            ]
+          }
+        }
+      ],
+      "open_questions": [
+        "Who is the primary actor performing this requirement?",
+        "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+        "How should session timeout, refresh, and logout invalidation be handled?",
+        "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+        "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+        "What specific patient information will be displayed?",
+        "What AI analytics capabilities are required?",
+        "Which clinical workflows are in scope for this release?",
+        "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+        "What audit trail depth is required for patient data changes?",
+        "What exact action should be performed?",
+        "What system component or entity is affected by this action?"
+      ],
+      "resolved_questions": [
+        "Which OAuth providers will be supported?",
+        "What permissions are assigned to user, doctor, and admin roles?",
+        "Can doctors modify medical records?",
+        "What healthcare data privacy standards must be followed?"
+      ],
+      "speaker_notes": []
+    },
+    {
+      "id": "d351fb6f-4b01-4b72-a341-99e43a1fbe39",
+      "title": "Live Run Meeting",
+      "owner_id": "c5d8728e-8439-42f6-8d4d-c861ae54773b",
+      "created_at": "2026-02-20T14:33:16.701097+00:00",
+      "updated_at": "2026-02-20T14:33:17.595154+00:00",
+      "domains": [
+        "healthcare",
+        "security",
+        "government"
+      ],
+      "minutes": [
+        {
+          "id": "d07473cc-9de4-4b70-a102-9a2a6fe8acc9",
+          "source": "text",
+          "text": "Healthcare portal with doctors and admins login, patient records, AI analytics.",
+          "created_at": "2026-02-20T14:33:17.595154+00:00"
+        }
+      ],
+      "analysis_history": [
+        {
+          "id": "639a0d96-acee-4f14-919e-7e86b21edd50",
+          "created_at": "2026-02-20T14:33:17.595154+00:00",
+          "input_text": "Healthcare portal with doctors and admins login, patient records, AI analytics.\nPM: Need role permissions and privacy compliance.\nDoctor: I should only view records.",
+          "analysis": {
+            "status": "gap_detected",
+            "message": "Analyzed 3 requirement(s). Overall status: gap_detected.",
+            "domains": [
+              "healthcare",
+              "security",
+              "government"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "What specific patient information will be displayed?",
+              "Which OAuth providers will be supported?",
+              "Can doctors modify medical records?",
+              "What healthcare data privacy standards must be followed?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+              "What specific patient information will be displayed?",
+              "Which OAuth providers will be supported?",
+              "Can doctors modify medical records?",
+              "What healthcare data privacy standards must be followed?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?"
+            ]
+          }
+        }
+      ],
+      "open_questions": [
+        "Who is the primary actor performing this requirement?",
+        "What exact action should be performed?",
+        "What system component or entity is affected by this action?",
+        "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+        "How should session timeout, refresh, and logout invalidation be handled?",
+        "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+        "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+        "What specific patient information will be displayed?",
+        "Which OAuth providers will be supported?",
+        "Can doctors modify medical records?",
+        "What healthcare data privacy standards must be followed?",
+        "What AI analytics capabilities are required?",
+        "Which clinical workflows are in scope for this release?",
+        "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+        "What audit trail depth is required for patient data changes?"
+      ],
+      "resolved_questions": [],
+      "speaker_notes": [
+        {
+          "id": "851018a3-6f0c-4be6-be5d-a29e37ae11b4",
+          "speaker": "PM",
+          "text": "Need role permissions and privacy compliance.",
+          "created_at": "2026-02-20T14:33:17.595154+00:00"
+        },
+        {
+          "id": "dbced932-15fc-4a93-8808-553b1bb88fda",
+          "speaker": "Doctor",
+          "text": "I should only view records.",
+          "created_at": "2026-02-20T14:33:17.595154+00:00"
+        }
+      ]
+    },
+    {
+      "id": "703034c8-d1db-42f3-aae4-ab87e8578418",
+      "title": "UI Feature Meeting",
+      "owner_id": "dd97ddfb-6d8f-4d93-9fd6-0c925bd46b56",
+      "created_at": "2026-02-20T14:55:08.079787+00:00",
+      "updated_at": "2026-02-20T14:55:08.539460+00:00",
+      "domains": [],
+      "minutes": [
+        {
+          "id": "eb4b19c5-3e7c-451a-8e9a-061b754973c4",
+          "source": "text",
+          "text": "User logs into portal.",
+          "created_at": "2026-02-20T14:55:08.539460+00:00"
+        }
+      ],
+      "analysis_history": [
+        {
+          "id": "271cd2e9-f3f6-4366-acc9-8f0bf6578671",
+          "created_at": "2026-02-20T14:55:08.539460+00:00",
+          "input_text": "User logs into portal.",
+          "analysis": {
+            "status": "gap_detected",
+            "message": "Analyzed 1 requirement(s). Overall status: gap_detected.",
+            "domains": [],
+            "questions": [
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+              "How should session timeout, refresh, and logout invalidation be handled?",
+              "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+              "What account recovery flow is required (email OTP, SMS OTP, reset link)?"
+            ]
+          }
+        }
+      ],
+      "open_questions": [
+        "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+        "How should session timeout, refresh, and logout invalidation be handled?",
+        "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+        "What account recovery flow is required (email OTP, SMS OTP, reset link)?"
+      ],
+      "resolved_questions": [],
+      "speaker_notes": []
+    },
+    {
+      "id": "3f999131-ab2b-4f5b-8118-1a9ad9ba7bfe",
+      "title": "meeting 1",
+      "owner_id": "cbc99586-c6f2-418e-9745-6b1e17a63f19",
+      "created_at": "2026-02-20T14:59:23.280860+00:00",
+      "updated_at": "2026-02-20T16:27:12.220082+00:00",
+      "domains": [
+        "finance",
+        "ecommerce"
+      ],
+      "minutes": [
+        {
+          "id": "dc3964ee-902b-4840-a16a-5f1b3283a5c6",
+          "source": "text",
+          "text": "Speaker 1: Listen up. We have to cut this company's budget in half and we are not leaving this room until we. We do it. Is that clear? Is that clear? Good. I need your best ideas, and I need them now. Shelly. Well, I've looked at the budget. Frankly, I think we're spending way too much transportation. Transportation, huh? Daniel, What do you think, Sir? Our online division is hemorrhaging money. I say we lose it. OK, Peter, I gotta go with Dan here. Derek, I'd lose tech support. OK, Red downsize researcher. Water guy, I don't work here, right? I agree with what Derek said. Mountain Joe.",
+          "created_at": "2026-02-20T15:03:03.906648+00:00"
+        },
+        {
+          "id": "4c1a31d0-fb52-446e-b2b9-a1de4559ff8e",
+          "source": "text",
+          "text": "Speaker 1: Early today, today's meeting is just about discussing how we are going to plan out our project Boxify. OK, yes, we'll now find out.\nSpeaker 2: What your meeting plan is about.\nSpeaker 3: So basically, we will go through the DNC cycle or firstly we will see what are the requirements that our project is going to be in process. And now I want to build a smart card with an intelligent ecommerce platform designed for middle-size retailers.\nSpeaker 3: The system allows customers to browse products, add them to cart a complete purchases using multiple payment methods.\nSpeaker 4: The platform supports Near.\nSpeaker 2: Account order history.\nSpeaker 5: Inventory tracking and all.\nSpeaker 2: Laptop.",
+          "created_at": "2026-02-20T16:27:12.219941+00:00"
+        }
+      ],
+      "analysis_history": [
+        {
+          "id": "1393ff01-2445-4bad-a2cc-a1a1e8e98fa2",
+          "created_at": "2026-02-20T15:03:03.906712+00:00",
+          "input_text": "Speaker 1: Listen up. We have to cut this company's budget in half and we are not leaving this room until we. We do it. Is that clear? Is that clear? Good. I need your best ideas, and I need them now. Shelly. Well, I've looked at the budget. Frankly, I think we're spending way too much transportation. Transportation, huh? Daniel, What do you think, Sir? Our online division is hemorrhaging money. I say we lose it. OK, Peter, I gotta go with Dan here. Derek, I'd lose tech support. OK, Red downsize researcher. Water guy, I don't work here, right? I agree with what Derek said. Mountain Joe.\nSpeaker 1: Listen up. We have to cut this company's budget in half and we are not leaving this room until we. We do it. Is that clear? Is that clear? Good. I need your best ideas, and I need them now. Shelly. Well, I've looked at the budget. Frankly, I think we're spending way too much transportation. Transportation, huh? Daniel, What do you think, Sir? Our online division is hemorrhaging money. I say we lose it. OK, Peter, I gotta go with Dan here. Derek, I'd lose tech support. OK, Red downsize researcher. Water guy, I don't work here, right? I agree with what Derek said. Mountain Joe.",
+          "analysis": {
+            "status": "incomplete",
+            "message": "Analyzed 1 requirement(s). Overall status: incomplete.",
+            "domains": [],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What AI analytics capabilities are required?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What AI analytics capabilities are required?"
+            ]
+          }
+        },
+        {
+          "id": "1ef14c56-0c03-4647-83f1-028fe7e13d2a",
+          "created_at": "2026-02-20T16:27:12.220075+00:00",
+          "input_text": "Speaker 1: Early today, today's meeting is just about discussing how we are going to plan out our project Boxify. OK, yes, we'll now find out.\nSpeaker 2: What your meeting plan is about.\nSpeaker 3: So basically, we will go through the DNC cycle or firstly we will see what are the requirements that our project is going to be in process. And now I want to build a smart card with an intelligent ecommerce platform designed for middle-size retailers.\nSpeaker 3: The system allows customers to browse products, add them to cart a complete purchases using multiple payment methods.\nSpeaker 4: The platform supports Near.\nSpeaker 2: Account order history.\nSpeaker 5: Inventory tracking and all.\nSpeaker 2: Laptop.\nSpeaker 1: Early today, today's meeting is just about discussing how we are going to plan out our project Boxify. OK, yes, we'll now find out.\nSpeaker 2: What your meeting plan is about.\nSpeaker 3: So basically, we will go through the DNC cycle or firstly we will see what are the requirements that our project is going to be in process. And now I want to build a smart card with an intelligent ecommerce platform designed for middle-size retailers.\nSpeaker 3: The system allows customers to browse products, add them to cart a complete purchases using multiple payment methods.\nSpeaker 4: The platform supports Near.\nSpeaker 2: Account order history.\nSpeaker 5: Inventory tracking and all.\nSpeaker 2: Laptop.",
+          "analysis": {
+            "status": "gap_detected",
+            "message": "Analyzed 8 requirement(s). Overall status: gap_detected.",
+            "domains": [
+              "finance",
+              "ecommerce"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "Which payment methods and providers should be supported?",
+              "How should failed or partial payment transactions be handled?",
+              "What payment security controls are mandatory (PCI, tokenization, encryption)?",
+              "What confirmation artifacts should users receive after payment?",
+              "What AI analytics capabilities are required?",
+              "What transaction risk controls and approval thresholds are required?",
+              "Which reconciliation process will be used for failed or delayed payments?",
+              "Which compliance framework applies to this product (PCI, AML, KYC)?",
+              "What order fulfillment and cancellation policy should the system enforce?",
+              "What inventory consistency strategy is required across channels?",
+              "What checkout abandonment recovery strategy is expected?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What AI analytics capabilities are required?",
+              "Which payment methods and providers should be supported?",
+              "How should failed or partial payment transactions be handled?",
+              "What payment security controls are mandatory (PCI, tokenization, encryption)?",
+              "What confirmation artifacts should users receive after payment?",
+              "What transaction risk controls and approval thresholds are required?",
+              "Which reconciliation process will be used for failed or delayed payments?",
+              "Which compliance framework applies to this product (PCI, AML, KYC)?",
+              "What order fulfillment and cancellation policy should the system enforce?",
+              "What inventory consistency strategy is required across channels?",
+              "What checkout abandonment recovery strategy is expected?"
+            ]
+          }
+        }
+      ],
+      "open_questions": [
+        "Who is the primary actor performing this requirement?",
+        "What exact action should be performed?",
+        "What system component or entity is affected by this action?",
+        "What AI analytics capabilities are required?",
+        "Which payment methods and providers should be supported?",
+        "How should failed or partial payment transactions be handled?",
+        "What payment security controls are mandatory (PCI, tokenization, encryption)?",
+        "What confirmation artifacts should users receive after payment?",
+        "What transaction risk controls and approval thresholds are required?",
+        "Which reconciliation process will be used for failed or delayed payments?",
+        "Which compliance framework applies to this product (PCI, AML, KYC)?",
+        "What order fulfillment and cancellation policy should the system enforce?",
+        "What inventory consistency strategy is required across channels?",
+        "What checkout abandonment recovery strategy is expected?"
+      ],
+      "resolved_questions": [],
+      "speaker_notes": [
+        {
+          "id": "9574a9f7-f1d5-4297-9f4d-85f9380bc32b",
+          "speaker": "Speaker 1",
+          "text": "Listen up. We have to cut this company's budget in half and we are not leaving this room until we. We do it. Is that clear? Is that clear? Good. I need your best ideas, and I need them now. Shelly. Well, I've looked at the budget. Frankly, I think we're spending way too much transportation. Transportation, huh? Daniel, What do you think, Sir? Our online division is hemorrhaging money. I say we lose it. OK, Peter, I gotta go with Dan here. Derek, I'd lose tech support. OK, Red downsize researcher. Water guy, I don't work here, right? I agree with what Derek said. Mountain Joe.",
+          "created_at": "2026-02-20T15:03:03.906690+00:00"
+        },
+        {
+          "id": "ca7d8003-e8d8-48ec-8dec-04f81759c6bf",
+          "speaker": "Speaker 1",
+          "text": "Early today, today's meeting is just about discussing how we are going to plan out our project Boxify. OK, yes, we'll now find out.",
+          "created_at": "2026-02-20T16:27:12.219989+00:00"
+        },
+        {
+          "id": "63bcf055-c47a-44e3-9e1a-c824b4101a99",
+          "speaker": "Speaker 2",
+          "text": "What your meeting plan is about.",
+          "created_at": "2026-02-20T16:27:12.220005+00:00"
+        },
+        {
+          "id": "e98b48c8-fa7d-412b-a3ab-642861277a48",
+          "speaker": "Speaker 3",
+          "text": "So basically, we will go through the DNC cycle or firstly we will see what are the requirements that our project is going to be in process. And now I want to build a smart card with an intelligent ecommerce platform designed for middle-size retailers.",
+          "created_at": "2026-02-20T16:27:12.220017+00:00"
+        },
+        {
+          "id": "4ebd4a2b-48c4-4bcd-b2a9-e39f04d8cd07",
+          "speaker": "Speaker 3",
+          "text": "The system allows customers to browse products, add them to cart a complete purchases using multiple payment methods.",
+          "created_at": "2026-02-20T16:27:12.220027+00:00"
+        },
+        {
+          "id": "25691a6b-7206-488a-821e-aaf73297bf5b",
+          "speaker": "Speaker 4",
+          "text": "The platform supports Near.",
+          "created_at": "2026-02-20T16:27:12.220036+00:00"
+        },
+        {
+          "id": "3763abb1-3016-4721-8ab2-95889266d1fa",
+          "speaker": "Speaker 2",
+          "text": "Account order history.",
+          "created_at": "2026-02-20T16:27:12.220047+00:00"
+        },
+        {
+          "id": "32ce58c2-c5b5-4667-838f-0d7c819dbc6e",
+          "speaker": "Speaker 5",
+          "text": "Inventory tracking and all.",
+          "created_at": "2026-02-20T16:27:12.220056+00:00"
+        },
+        {
+          "id": "7e18b842-b868-402d-a1a3-066228a9b964",
+          "speaker": "Speaker 2",
+          "text": "Laptop.",
+          "created_at": "2026-02-20T16:27:12.220065+00:00"
+        }
+      ]
+    },
+    {
+      "id": "f00b6164-cd47-4e44-8597-4769f1e005bb",
+      "title": "about smartcart",
+      "owner_id": "cbc99586-c6f2-418e-9745-6b1e17a63f19",
+      "created_at": "2026-02-20T15:57:00.711057+00:00",
+      "updated_at": "2026-02-20T15:57:00.711074+00:00",
+      "domains": [],
+      "minutes": [],
+      "analysis_history": [],
+      "open_questions": [],
+      "resolved_questions": [],
+      "speaker_notes": []
+    },
+    {
+      "id": "5d02a9c3-aab9-4480-8aa8-d7de0bb5b9dd",
+      "title": "cart",
+      "owner_id": "cbc99586-c6f2-418e-9745-6b1e17a63f19",
+      "created_at": "2026-02-20T16:18:27.299070+00:00",
+      "updated_at": "2026-02-20T16:18:27.299101+00:00",
+      "domains": [],
+      "minutes": [],
+      "analysis_history": [],
+      "open_questions": [],
+      "resolved_questions": [],
+      "speaker_notes": []
+    },
+    {
+      "id": "e4872be2-0f60-45a0-9ad2-6b2fb0b3bf71",
+      "title": "meeting2.o",
+      "owner_id": "cbc99586-c6f2-418e-9745-6b1e17a63f19",
+      "created_at": "2026-02-23T07:57:14.443459+00:00",
+      "updated_at": "2026-02-23T07:57:14.443479+00:00",
+      "domains": [],
+      "minutes": [],
+      "analysis_history": [],
+      "open_questions": [],
+      "resolved_questions": [],
+      "speaker_notes": []
+    }
+  ],
+  "sessions": [
+    {
+      "token": "T1YSF7fpubF3aKJ9HZtsudorb1Uc8IQLryTSgF5Mdak",
+      "user_id": "696049a9-bd06-475f-bd36-9e817191e5f3",
+      "created_at": "2026-02-20T14:58:02.811475+00:00"
+    },
+    {
+      "token": "XOd4EjpXY8tMZWhioaBX3NW_tf6qGjoiZrrYxY-JaFo",
+      "user_id": "fa55cc01-ed35-4c43-8243-2d374e23eeaf",
+      "created_at": "2026-02-20T15:16:47.287375+00:00"
+    },
+    {
+      "token": "CE1e5iHSI8XidlNa6CA2oRVu4g7fttDvj2hc7BfxFPk",
+      "user_id": "84968f7e-9f47-4a7e-a607-079ea28366dc",
+      "created_at": "2026-02-20T15:16:47.326376+00:00"
+    },
+    {
+      "token": "IrafQkrveXqaD_p-3E-P0JVkQhMReIORBVwlKy5U2GU",
+      "user_id": "f3ab7bd6-e324-4121-8722-5c5a8634294d",
+      "created_at": "2026-02-20T15:16:47.387350+00:00"
+    },
+    {
+      "token": "Z-lg7yy56hkBG7UBBbPaF15LIgVEkbkES2akOMfBdOM",
+      "user_id": "f0032ce9-8fc3-4c0b-936b-cc679eeba2ac",
+      "created_at": "2026-02-20T15:18:12.774396+00:00"
+    },
+    {
+      "token": "hQQVlU-ezQanF2QENEzg-5guw88N8FEj4wUmV8-kPlw",
+      "user_id": "cbc99586-c6f2-418e-9745-6b1e17a63f19",
+      "created_at": "2026-02-20T15:52:09.264501+00:00"
+    }
+  ]
+}
