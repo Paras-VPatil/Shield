@@ -299,6 +299,18 @@ function renderAnalysis(data) {
   listInto("openQuestions", data.open_questions || []);
   listInto("resolvedQuestions", data.resolved_questions || []);
   renderItemAnalyses(data.item_analyses || []);
+
+  const capability = data.capability_insights || {};
+  document.getElementById("complexityScore").textContent = String(capability.complexity_score ?? 0);
+  document.getElementById("decisionReadinessScore").textContent = String(
+    capability.decision_readiness_score ?? 0,
+  );
+  listInto("topConcepts", capability.top_concepts || []);
+  listInto("investigationActions", capability.investigation_actions || []);
+  listInto("serviceImprovements", capability.service_improvements || []);
+  listInto("businessOpportunities", capability.business_opportunities || []);
+  listInto("stakeholderComms", capability.stakeholder_communications || []);
+  listInto("visualRecommendations", capability.visualization_recommendations || []);
 }
 
 function renderMeetingHistory(detail) {

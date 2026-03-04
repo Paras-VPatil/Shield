@@ -1,181 +1,365 @@
 <!doctype html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>THE SHIELD</title>
+  <title>RequiMind AI</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#0d59f2",
+            "bg-light": "#f4f6fb",
+            "bg-dark": "#0d1423",
+            "card-dark": "#111a2e",
+          },
+          fontFamily: {
+            display: ["Space Grotesk", "sans-serif"],
+          },
+          boxShadow: {
+            soft: "0 24px 70px rgba(13, 89, 242, 0.22)"
+          },
+        },
+      },
+    };
+  </script>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <section id="landingView" class="landing">
-    <div class="landing-card">
-      <h1>THE SHIELD</h1>
-      <p class="subtitle">AI workflow for meeting-driven requirement intelligence</p>
-      <p>Capture discussions, detect gaps, ask decision-focused clarification questions, and track resolved vs open questions over time.</p>
-      <button id="getStartedBtn" type="button">Get Started</button>
+<body class="bg-bg-light text-slate-900 dark:bg-bg-dark dark:text-slate-100 font-display transition-colors duration-300">
+  <header class="sticky top-0 z-50 border-b border-slate-200/80 bg-bg-light/85 backdrop-blur-md dark:border-slate-800 dark:bg-bg-dark/80">
+    <div class="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
+      <div class="flex items-center gap-3">
+        <div class="grid h-7 w-7 place-items-center rounded-sm bg-slate-900 dark:bg-white">
+          <svg class="h-4 w-4 text-white dark:text-black" fill="currentColor" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M6 6H42L36 24L42 42H6L12 24L6 6Z"></path>
+          </svg>
+        </div>
+        <span class="text-lg font-bold tracking-tight">RequiMind</span>
+      </div>
+      <nav class="hidden items-center gap-6 md:flex">
+        <a class="text-sm text-slate-600 transition-colors hover:text-primary dark:text-slate-400" href="#workflow">Workflow</a>
+        <a class="text-sm text-slate-600 transition-colors hover:text-primary dark:text-slate-400" href="#workspace">Workspace</a>
+        <a class="text-sm text-slate-600 transition-colors hover:text-primary dark:text-slate-400" href="#faq">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button id="openLoginBtn" type="button" class="rounded-full px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:text-primary dark:text-slate-300">Log in</button>
+        <button id="switchAccountBtn" type="button" class="hidden rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-300">Switch</button>
+        <div id="profileBox" class="profile-box hidden">
+          <div id="profileAvatar" class="avatar-chip">U</div>
+          <div>
+            <p id="profileName" class="text-sm font-semibold">user</p>
+            <button id="logoutBtn" type="button" class="text-xs text-slate-500 underline dark:text-slate-400">Logout</button>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
+  </header>
 
-  <section id="appView" class="app hidden">
-    <header class="topbar">
-      <div>
-        <h1 class="brand">THE SHIELD</h1>
-        <p class="top-subtitle">Requirement Intelligence Workspace</p>
+  <main>
+    <section id="landingView">
+      <section class="hero-gradient relative overflow-hidden pb-28 pt-20">
+        <div class="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center">
+          <div class="relative mb-12 flex h-64 w-64 items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-primary/20 blur-3xl"></div>
+            <div class="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/15 p-2 dark:bg-slate-900/40">
+              <img class="h-full w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=900&q=80" alt="Abstract holographic shield concept">
+            </div>
+          </div>
+
+          <h1 class="mb-6 max-w-4xl text-5xl font-bold leading-tight tracking-tight md:text-7xl">
+            Build <span class="text-primary">requirement clarity</span> from every meeting
+          </h1>
+          <p class="mb-10 max-w-2xl text-lg text-slate-600 dark:text-slate-400 md:text-xl">
+            Capture discussions, extract requirements, detect ambiguity gaps, and auto-generate clarification questions in one continuous workflow.
+          </p>
+
+          <div class="w-full max-w-2xl rounded-full border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined ml-3 text-slate-400">search</span>
+              <input class="w-full border-none bg-transparent px-3 py-2 text-base text-slate-800 placeholder:text-slate-500 focus:ring-0 dark:text-white" placeholder="Describe your next discovery meeting..." type="text" aria-label="Discovery prompt">
+              <button id="getStartedBtn" type="button" class="rounded-full bg-primary px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-600">Get Started</button>
+            </div>
+          </div>          <ul class="mt-8 flex flex-wrap justify-center gap-3 opacity-70" role="list">
+            <li class="chip">Gap Detection</li>
+            <li class="chip">Live Analysis</li>
+            <li class="chip">Speaker Tracking</li>
+            <li class="chip">Meeting History</li>
+            <li class="chip">Clarification AI</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="workflow" class="bg-slate-100/80 py-24 dark:bg-slate-900/40">
+        <div class="mx-auto grid w-full max-w-7xl gap-16 px-6 lg:grid-cols-2">
+          <div class="space-y-6">
+            <h2 class="text-3xl font-bold md:text-4xl">How RequiMind works</h2>
+            <p class="text-lg leading-relaxed text-slate-600 dark:text-slate-400">Your team captures notes or audio, RequiMind distills requirements, tracks unresolved questions, and preserves full meeting intelligence over time.</p>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <article class="glass-card p-5">
+                <span class="material-symbols-outlined mb-2 text-3xl text-primary">tune</span>
+                <h3 class="font-semibold">Structured Analysis</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Domain detection, requirement extraction, and status tagging for every input.</p>
+              </article>
+              <article class="glass-card p-5">
+                <span class="material-symbols-outlined mb-2 text-3xl text-primary">graphic_eq</span>
+                <h3 class="font-semibold">Audio Intelligence</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Auto speaker clustering and transcript-driven requirement capture.</p>
+              </article>
+            </div>
+            <div class="grid gap-3 pt-2">
+              <article class="glass-card p-4">
+                <h4 class="font-semibold">Complex Problem Intelligence</h4>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Investigate, analyze, visualize, articulate, and solve complex requirement concepts with disciplined decision support.</p>
+              </article>
+              <article class="glass-card p-4">
+                <h4 class="font-semibold">Service Improvement Discovery</h4>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Identify and explore opportunities to improve service quality and delivery outcomes.</p>
+              </article>
+              <article class="glass-card p-4">
+                <h4 class="font-semibold">Business Opportunity Detection</h4>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Pinpoint business opportunities that help organizations operate more effectively.</p>
+              </article>
+              <article class="glass-card p-4">
+                <h4 class="font-semibold">Stakeholder Communication</h4>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Understand requirements and disseminate actionable decisions to multiple stakeholders.</p>
+              </article>
+            </div>
+          </div>
+
+          <div id="faq" class="space-y-2">
+            <h3 class="mb-4 flex items-center gap-2 text-xl font-bold"><span class="material-symbols-outlined text-primary">help</span>Frequently Asked Questions</h3>
+            <details class="faq-item" open>
+              <summary>Can I analyze only typed notes?</summary>
+              <p>Yes. You can run live and full analysis using typed requirements without recording audio.</p>
+            </details>
+            <details class="faq-item">
+              <summary>How are open questions tracked?</summary>
+              <p>Each meeting keeps a running history of unresolved and resolved clarification questions.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Do I need to upload previous minutes?</summary>
+              <p>No. Upload is optional and useful when continuing from earlier meetings.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Can I switch accounts safely?</summary>
+              <p>Yes. Session controls let you login, logout, and switch account from the header.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-28">
+        <div class="mx-auto w-full max-w-7xl px-6">
+          <div class="relative overflow-hidden rounded-3xl bg-primary p-12 text-center">
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 36px 36px;"></div>
+            <h2 class="relative z-10 text-3xl font-bold text-white md:text-5xl">From discussion to decision in minutes</h2>
+            <p class="relative z-10 mx-auto mt-4 max-w-xl text-lg text-blue-100">Open the workspace and run your first meeting analysis flow end-to-end.</p>
+            <button type="button" id="ctaStartBtn" class="relative z-10 mt-8 rounded-full bg-white px-9 py-3 text-base font-bold text-primary transition-colors hover:bg-blue-50">Launch Workspace</button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="border-t border-slate-200 bg-slate-100/80 py-10 text-center text-sm text-slate-500 dark:border-slate-900 dark:bg-slate-950/70 dark:text-slate-400">
+        RequiMind AI workspace for meeting-driven requirement intelligence.
+      </footer>
+    </section>
+
+    <section id="appView" class="hidden pb-20 pt-10">
+      <div class="mx-auto w-full max-w-7xl px-6" id="workspace">
+        <div class="mb-8 rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-xl dark:border-slate-800 dark:bg-card-dark/70">
+          <h2 class="text-2xl font-bold">Requirement Intelligence Workspace</h2>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Configure your backend, manage meetings, capture input, and analyze outcomes.</p>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-2">
+          <section class="workspace-card">
+            <h3 class="panel-title">API Configuration</h3>
+            <label class="field-label" for="apiBase">API Base URL</label>
+            <input id="apiBase" type="text" value="http://127.0.0.1:8000">
+            <p class="hint-text">Backend can use local/offline Ollama or Gemini depending on server settings.</p>
+          </section>
+
+          <section class="workspace-card">
+            <h3 class="panel-title">Meeting Setup</h3>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label class="field-label" for="meetingTitle">New Meeting Title</label>
+                <input id="meetingTitle" type="text" placeholder="Discovery Call - Week 3">
+              </div>
+              <div>
+                <label class="field-label" for="meetingSelect">Select Meeting</label>
+                <select id="meetingSelect"></select>
+              </div>
+            </div>
+            <div class="button-row mt-4">
+              <button id="createMeetingBtn" type="button" class="btn-primary">Create Meeting</button>
+              <button id="refreshMeetingsBtn" type="button" class="btn-secondary">Refresh Records</button>
+              <button id="downloadTranscriptBtn" type="button" class="btn-secondary">Download Transcript</button>
+            </div>
+
+            <details class="optional-box mt-4">
+              <summary>Upload Previous Minutes (Optional)</summary>
+              <label class="field-label" for="minutesPdf">PDF Minutes</label>
+              <input id="minutesPdf" type="file" accept=".pdf">
+              <button id="uploadPdfBtn" type="button" class="btn-secondary mt-3">Upload PDF</button>
+              <p class="hint-text">If this is your first meeting, skip this step.</p>
+            </details>
+          </section>
+
+          <section class="workspace-card">
+            <h3 class="panel-title">Input Notes</h3>
+            <label class="field-label" for="requirementText">Requirement Text / Meeting Notes</label>
+            <textarea id="requirementText" rows="8" placeholder="Type points or paragraphs here."></textarea>
+
+            <h4 class="sub-title">Detected Requirements (Live)</h4>
+            <ul id="liveRequirements" class="list-box"></ul>
+
+            <div class="live-box">
+              <p><strong>Live Status:</strong> <span id="liveStatus" aria-live="polite">Waiting for input...</span></p>
+              <h4 class="sub-title">Live Domains</h4>
+              <ul id="liveDomains" class="list-box" aria-live="polite"></ul>
+              <h4 class="sub-title">Live Ambiguity Gaps</h4>
+              <ul id="liveDomainGaps" class="list-box" aria-live="polite"></ul>
+              <h4 class="sub-title">Live Clarification Questions</h4>
+              <ul id="liveQuestions" class="list-box" aria-live="polite"></ul>
+            </div>
+
+            <button id="analyzeBtn" type="button" class="btn-primary mt-4">Analyze Current Input</button>
+          </section>
+
+          <section class="workspace-card">
+            <h3 class="panel-title">Audio Tracking</h3>
+            <p class="hint-text">Automatic speaker identification uses voice signature clustering (best effort on browser audio).</p>
+
+            <label class="check-row">
+              <input id="autoSpeakerToggle" type="checkbox" checked>
+              Auto identify speaker from voice
+            </label>
+            <label class="check-row">
+              <input id="audioAsPrimary" type="checkbox" checked>
+              Use captured audio as primary meeting content
+            </label>
+
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label class="field-label" for="speakerName">Manual Speaker Name (optional)</label>
+                <input id="speakerName" type="text" placeholder="Doctor / PM / Analyst">
+              </div>
+              <div>
+                <label class="field-label" for="speakerSelect">Current Speaker</label>
+                <select id="speakerSelect"></select>
+              </div>
+            </div>
+
+            <div class="button-row mt-4">
+              <button id="addSpeakerBtn" type="button" class="btn-secondary">Add Speaker</button>
+              <button id="audioStartBtn" type="button" class="btn-secondary">Start Audio</button>
+              <button id="audioStopBtn" type="button" class="btn-secondary" disabled>Stop Audio</button>
+              <button id="analyzeMeetingBtn" type="button" class="btn-primary">Analyze Full Meeting</button>
+            </div>
+
+            <p class="mt-4"><strong>Audio Status:</strong> <span id="audioStatus" aria-live="polite">Idle</span></p>
+            <p><strong>Detected Speaker:</strong> <span id="detectedSpeaker" aria-live="polite">None</span></p>
+            <pre id="transcriptPreview" class="list-box max-h-40 overflow-y-auto whitespace-pre-wrap">No transcript yet.</pre>
+
+            <h4 class="sub-title">Captured Speaker Segments</h4>
+            <ul id="speakerSegments" class="list-box"></ul>
+          </section>
+        </div>
+
+        <section id="result" class="workspace-card result hidden mt-6">
+          <h3 class="panel-title">Analysis Result</h3>
+          <p><strong>Status:</strong> <span id="status" aria-live="polite"></span></p>
+          <p id="message"></p>
+
+          <h4 class="sub-title">Detected Domains</h4>
+          <ul id="domains" class="list-box" aria-live="polite"></ul>
+
+          <h4 class="sub-title">Extracted Requirements</h4>
+          <ul id="extractedRequirements" class="list-box" aria-live="polite"></ul>
+
+          <h4 class="sub-title">Open Questions</h4>
+          <ul id="openQuestions" class="list-box" aria-live="polite"></ul>
+
+          <h4 class="sub-title">Resolved Questions</h4>
+          <ul id="resolvedQuestions" class="list-box" aria-live="polite"></ul>
+
+          <h4 class="sub-title">Clarification Questions</h4>
+          <ul id="questions" class="list-box" aria-live="polite"></ul>
+
+          <h4 class="sub-title">Per-Requirement Analysis</h4>
+          <div id="itemAnalyses" class="cards"></div>
+
+          <h4 class="sub-title">NLP Capability Insights</h4>
+          <p><strong>Complexity Score:</strong> <span id="complexityScore"></span></p>
+          <p><strong>Decision Readiness Score:</strong> <span id="decisionReadinessScore"></span></p>
+
+          <h5 class="sub-title">Top Concepts</h5>
+          <ul id="topConcepts" class="list-box"></ul>
+
+          <h5 class="sub-title">Investigation Actions</h5>
+          <ul id="investigationActions" class="list-box"></ul>
+
+          <h5 class="sub-title">Service Improvement Opportunities</h5>
+          <ul id="serviceImprovements" class="list-box"></ul>
+
+          <h5 class="sub-title">Business Opportunities</h5>
+          <ul id="businessOpportunities" class="list-box"></ul>
+
+          <h5 class="sub-title">Stakeholder Communication Plan</h5>
+          <ul id="stakeholderComms" class="list-box"></ul>
+
+          <h5 class="sub-title">Visualization Recommendations</h5>
+          <ul id="visualRecommendations" class="list-box"></ul>
+
+          <h4 class="sub-title">LLM Summary</h4>
+          <p id="summary"></p>
+        </section>
+
+        <section class="workspace-card mt-6">
+          <h3 class="panel-title">Meeting History</h3>
+          <div id="meetingHistory" class="history"><p>No meeting selected.</p></div>
+        </section>
+
+        <p id="error" class="error hidden"></p>
       </div>
-      <div class="top-actions">
-        <button id="openLoginBtn" type="button" class="secondary">Login</button>
-        <button id="switchAccountBtn" type="button" class="secondary hidden">Switch Account</button>
-        <div id="profileBox" class="profile hidden">
-          <div id="profileAvatar" class="avatar">U</div>
-          <div>
-            <p id="profileName" class="profile-name">user</p>
-            <button id="logoutBtn" type="button" class="link-btn">Logout</button>
-          </div>
-        </div>
-      </div>
-    </header>
+    </section>
+  </main>
 
-    <main class="container">
-      <section class="panel">
-        <h2>API Configuration</h2>
-        <label for="apiBase">API Base URL</label>
-        <input id="apiBase" type="text" value="http://127.0.0.1:8000">
-        <p class="hint">Backend can use local/offline Ollama or Gemini depending on server settings.</p>
-      </section>
-
-      <section class="panel">
-        <h2>Meeting Setup</h2>
-        <div class="grid-2">
-          <div>
-            <label for="meetingTitle">New Meeting Title</label>
-            <input id="meetingTitle" type="text" placeholder="Discovery Call - Week 3">
-          </div>
-          <div>
-            <label for="meetingSelect">Select Meeting</label>
-            <select id="meetingSelect"></select>
-          </div>
-        </div>
-        <div class="actions">
-          <button id="createMeetingBtn" type="button">Create Meeting</button>
-          <button id="refreshMeetingsBtn" type="button" class="secondary">Refresh Records</button>
-          <button id="downloadTranscriptBtn" type="button" class="secondary">Download Meeting Text</button>
-        </div>
-
-        <details class="optional-box">
-          <summary>Upload Previous Minutes (Optional)</summary>
-          <label for="minutesPdf">PDF Minutes</label>
-          <input id="minutesPdf" type="file" accept=".pdf">
-          <button id="uploadPdfBtn" type="button" class="secondary">Upload PDF</button>
-          <p class="hint">If this is your first meeting, skip this step.</p>
-        </details>
-      </section>
-
-      <section class="panel">
-        <h2>Input Notes</h2>
-        <label for="requirementText">Requirement Text / Meeting Notes</label>
-        <textarea id="requirementText" rows="7" placeholder="Type points or paragraphs here."></textarea>
-        <h3>Detected Requirements (Live)</h3>
-        <ul id="liveRequirements"></ul>
-        <div class="live-insights">
-          <p><strong>Live Status:</strong> <span id="liveStatus">Waiting for input...</span></p>
-          <h3>Live Domains</h3>
-          <ul id="liveDomains"></ul>
-          <h3>Live Ambiguity Gaps</h3>
-          <ul id="liveDomainGaps"></ul>
-          <h3>Live Clarification Questions</h3>
-          <ul id="liveQuestions"></ul>
-        </div>
-        <button id="analyzeBtn" type="button">Analyze Current Input</button>
-      </section>
-
-      <section class="panel">
-        <h2>Audio Tracking</h2>
-        <p class="hint">Automatic speaker identification uses voice signature clustering (best effort on browser audio).</p>
-        <label class="check">
-          <input id="autoSpeakerToggle" type="checkbox" checked>
-          Auto identify speaker from voice
-        </label>
-        <label class="check">
-          <input id="audioAsPrimary" type="checkbox" checked>
-          Use captured audio as primary meeting content
-        </label>
-        <div class="grid-2">
-          <div>
-            <label for="speakerName">Manual Speaker Name (optional)</label>
-            <input id="speakerName" type="text" placeholder="Doctor / PM / Analyst">
-          </div>
-          <div>
-            <label for="speakerSelect">Current Speaker</label>
-            <select id="speakerSelect"></select>
-          </div>
-        </div>
-        <div class="actions">
-          <button id="addSpeakerBtn" type="button" class="secondary">Add Speaker</button>
-          <button id="audioStartBtn" type="button" class="secondary">Start Audio</button>
-          <button id="audioStopBtn" type="button" class="secondary" disabled>Stop Audio</button>
-          <button id="analyzeMeetingBtn" type="button">Analyze Full Meeting</button>
-        </div>
-        <p><strong>Audio Status:</strong> <span id="audioStatus">Idle</span></p>
-        <p><strong>Detected Speaker:</strong> <span id="detectedSpeaker">None</span></p>
-        <pre id="transcriptPreview">No transcript yet.</pre>
-        <h3>Captured Speaker Segments</h3>
-        <ul id="speakerSegments"></ul>
-      </section>
-
-      <section id="result" class="result hidden">
-        <h2>Analysis Result</h2>
-        <p><strong>Status:</strong> <span id="status"></span></p>
-        <p id="message"></p>
-
-        <h3>Detected Domains</h3>
-        <ul id="domains"></ul>
-
-        <h3>Extracted Requirements</h3>
-        <ul id="extractedRequirements"></ul>
-
-        <h3>Open Questions</h3>
-        <ul id="openQuestions"></ul>
-
-        <h3>Resolved Questions</h3>
-        <ul id="resolvedQuestions"></ul>
-
-        <h3>Clarification Questions</h3>
-        <ul id="questions"></ul>
-
-        <h3>Per-Requirement Analysis</h3>
-        <div id="itemAnalyses" class="cards"></div>
-
-        <h3>LLM Summary</h3>
-        <p id="summary"></p>
-      </section>
-
-      <section class="panel">
-        <h2>Meeting History</h2>
-        <div id="meetingHistory" class="history">
-          <p>No meeting selected.</p>
-        </div>
-      </section>
-
-      <p id="error" class="error hidden"></p>
-    </main>
-  </section>
-
-  <div id="loginModal" class="modal hidden">
+  <div id="loginModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
     <div class="modal-card">
-      <h2>Login</h2>
-      <label for="username">Username</label>
+      <h2 id="loginModalTitle" class="text-2xl font-bold">Login</h2>
+      <label class="field-label" for="username">Username</label>
       <input id="username" type="text" placeholder="analyst01">
-      <label for="password">Password</label>
+      <label class="field-label" for="password">Password</label>
       <input id="password" type="password" placeholder="******">
       <p id="loginError" class="error hidden"></p>
-      <div class="actions">
-        <button id="registerBtn" type="button" class="secondary">Register</button>
-        <button id="loginBtn" type="button">Login</button>
-        <button id="closeLoginBtn" type="button" class="secondary">Close</button>
+      <div class="button-row mt-4">
+        <button id="registerBtn" type="button" class="btn-secondary">Register</button>
+        <button id="loginBtn" type="button" class="btn-primary">Login</button>
+        <button id="closeLoginBtn" type="button" class="btn-secondary">Close</button>
       </div>
     </div>
   </div>
 
   <script src="script.js"></script>
+  <script>
+    const ctaStartBtn = document.getElementById("ctaStartBtn");
+    if (ctaStartBtn) {
+      ctaStartBtn.addEventListener("click", () => {
+        const getStarted = document.getElementById("getStartedBtn");
+        if (getStarted) {
+          getStarted.click();
+        }
+      });
+    }
+  </script>
 </body>
 </html>

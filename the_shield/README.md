@@ -1,4 +1,4 @@
-# THE SHIELD
+# RequiMind AI
 
 AI-powered software requirement analysis and ambiguity detection system.
 
@@ -16,6 +16,11 @@ AI-powered software requirement analysis and ambiguity detection system.
 - Automatic speaker labeling mode (voice-signature clustering, browser best effort)
 - PDF minutes upload and continuation from previous meetings
 - Meeting transcript export as downloadable `.txt`
+- NLP capability insights for:
+  - complex-problem investigation and disciplined decision support
+  - service improvement opportunity discovery
+  - business opportunity identification
+  - stakeholder communication/dissemination planning
 - LLM summarization modes:
   - `auto` (try local Ollama, then Gemini, then fallback)
   - `ollama` / `local` (offline/local-first)
@@ -44,19 +49,33 @@ pip install -r requirements.txt
 ```bash
 GEMINI_API_KEY=your_key_here
 GEMINI_MODEL=gemini-1.5-flash
-LLM_MODE=auto
+LLM_MODE=local
 OLLAMA_URL=http://127.0.0.1:11434
 OLLAMA_MODEL=llama3.2
 CORS_ORIGINS=*
+MONGODB_URI=mongodb://127.0.0.1:27017
+MONGODB_DB_NAME=the_shield
 ```
 
-4. Run backend:
+4. Initialize MongoDB schema and indexes:
+
+```bash
+python scripts/init_mongo_schema.py
+```
+
+Or with `mongosh` (no Python dependency):
+
+```bash
+mongosh "mongodb://127.0.0.1:27017/admin?replicaSet=rs0" scripts/init_mongo_schema.js
+```
+
+5. Run backend:
 
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-5. Open `frontend/index.html` and set API Base URL to `http://localhost:8000`.
+6. Open `frontend/index.html` and set API Base URL to `http://localhost:8000`.
 
 ## Meeting Workflow
 
@@ -87,6 +106,14 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 - `POST /meetings/{meeting_id}/minutes/pdf`
 - `POST /meetings/{meeting_id}/analyze`
 - `GET /meetings/{meeting_id}/transcript`
+
+## Local NLP Model Training (Gemini-Reduction Path)
+
+- Recommended base model for fine-tuning: `microsoft/Phi-3.5-mini-instruct` (permissive MIT license).
+- NLP embedding model for retrieval/reranking: `sentence-transformers/all-MiniLM-L6-v2` (Apache-2.0).
+- Training script: `backend/scripts/train_requirement_nlp_lora.py`
+- Training dependency file: `backend/requirements-train.txt`
+- Detailed plan: `docs/model_training_plan.md`
 
 ## Example: Analyze
 

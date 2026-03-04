@@ -5,11 +5,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "THE SHIELD API"
+    app_name: str = "RequiMind AI API"
     app_version: str = "0.1.0"
     gemini_api_key: Optional[str] = None
     gemini_model: str = "gemini-1.5-flash"
-    llm_mode: str = "auto"  # auto | gemini | ollama | local
+    llm_mode: str = "local"  # auto | gemini | ollama | local
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_model: str = "llama3.2"
     cors_origins: str = "*"

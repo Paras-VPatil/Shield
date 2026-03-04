@@ -1,4 +1,4 @@
-# THE SHIELD MVP TODO
+# RequiMind AI MVP TODO
 
 ## 1. Project Setup
 

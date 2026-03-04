@@ -20,6 +20,17 @@ class RequirementItemAnalysis(BaseModel):
     questions: List[str] = Field(default_factory=list)
 
 
+class CapabilityInsights(BaseModel):
+    complexity_score: int = Field(default=0, ge=0, le=100)
+    decision_readiness_score: int = Field(default=0, ge=0, le=100)
+    top_concepts: List[str] = Field(default_factory=list)
+    investigation_actions: List[str] = Field(default_factory=list)
+    service_improvements: List[str] = Field(default_factory=list)
+    business_opportunities: List[str] = Field(default_factory=list)
+    stakeholder_communications: List[str] = Field(default_factory=list)
+    visualization_recommendations: List[str] = Field(default_factory=list)
+
+
 class AnalyzeResponse(BaseModel):
     status: Literal["complete", "incomplete", "gap_detected"]
     message: str
@@ -30,6 +41,7 @@ class AnalyzeResponse(BaseModel):
     domains: List[str] = Field(default_factory=list)
     extracted_requirements: List[str] = Field(default_factory=list)
     item_analyses: List[RequirementItemAnalysis] = Field(default_factory=list)
+    capability_insights: CapabilityInsights = Field(default_factory=CapabilityInsights)
     llm_summary: str
 
 

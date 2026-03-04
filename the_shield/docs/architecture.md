@@ -1,10 +1,11 @@
-# THE SHIELD Architecture (Enhanced MVP)
+# RequiMind AI Architecture (Enhanced MVP)
 
 ## High-Level Components
 
 - Frontend: static HTML/CSS/JS client with login, meeting management, speaker tracking, and PDF upload.
 - Backend: FastAPI service exposing standalone analysis and meeting workflow endpoints.
 - Service Layer: extractor, parser, gap detector, domain detector, question generator, summary engine.
+- Capability Insight Layer: NLP-driven complexity scoring, service/business opportunity detection, stakeholder dissemination guidance, and visualization recommendations.
 - Auth Layer: token-based login and protected meeting endpoints.
 - Persistence Layer: JSON-backed storage for users, meetings, history, open/resolved questions.
 - LLM Layer: local/offline-first Ollama option, Gemini option, deterministic fallback.
@@ -44,6 +45,7 @@
 - `app/routes/meetings.py`: meeting CRUD, PDF upload, contextual analysis.
 - `app/models/*`: request and response schemas.
 - `app/services/*`: extraction, parsing, domains, questions, auth, meetings, LLM.
+- `app/services/capability_insight_service.py`: deterministic NLP capability insight generation.
 - `app/core/*`: settings and provider configuration.
 - `app/database/db.py`: persistent JSON storage interface.
 - `app/utils/*`: reusable helpers and text utilities.
@@ -54,6 +56,7 @@
 - Deterministic fallback summary avoids hard dependency on external model providers.
 - Offline/local LLM mode reduces external dependency when internet is unavailable.
 - Question generation is filtered for quality and de-duplicated.
+- Capability insights are deterministic and local, reducing dependency on external LLM providers.
 
 ## Next Extension Path
 

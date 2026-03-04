@@ -1,6 +1,7 @@
 from typing import Optional
 
 from app.models.response_models import ParseResult, RequirementItemAnalysis
+from app.services.capability_insight_service import build_capability_insights
 from app.services.domain_detector import detect_domains
 from app.services.gap_detector import analyze_requirement_completeness
 from app.services.llm_service import LLMService
@@ -63,6 +64,13 @@ def run_requirement_analysis(
         requirement_text=context_payload,
         domains=detected_domains,
     )
+    capability_insights = build_capability_insights(
+        text=context_payload,
+        item_analyses=item_analyses,
+        missing_fields=all_missing_fields,
+        domain_gaps=all_domain_gaps,
+        domains=detected_domains,
+    )
     parsed = item_analyses[0].parsed.model_dump() if item_analyses else parse_requirement(text)
     message = (
         f"Analyzed {len(requirement_items)} requirement(s). "
@@ -86,6 +94,7 @@ def run_requirement_analysis(
         "questions": questions,
         "extracted_requirements": requirement_items,
         "item_analyses": item_analyses,
+        "capability_insights": capability_insights,
         "llm_summary": llm_summary,
         "domains": detected_domains,
     }

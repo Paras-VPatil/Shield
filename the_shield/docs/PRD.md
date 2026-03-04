@@ -1,6 +1,6 @@
 # PRODUCT REQUIREMENTS DOCUMENT (PRD)
 
-## Project Name: THE SHIELD
+## Project Name: RequiMind AI
 
 AI-Powered Software Requirement Analysis & Ambiguity Detection System
 
@@ -10,7 +10,7 @@ AI-Powered Software Requirement Analysis & Ambiguity Detection System
 
 ### 1.1 Vision
 
-THE SHIELD is an AI-driven system that automatically analyzes natural-language software requirements, detects ambiguity, identifies missing information, generates clarification questions, and produces structured summaries to assist software engineers, analysts, and students in requirement engineering.
+RequiMind AI is an AI-driven system that automatically analyzes natural-language software requirements, detects ambiguity, identifies missing information, generates clarification questions, and produces structured summaries to assist software engineers, analysts, and students in requirement engineering.
 
 ### 1.2 Goal
 
@@ -144,6 +144,16 @@ Output:
 }
 ```
 
+### 4.8 Capability Insight Engine (NLP)
+
+System generates NLP-driven insights for:
+
+- Complex-problem investigation and disciplined decision support
+- Service improvement opportunities
+- Business opportunity identification
+- Stakeholder communication/dissemination planning
+- Visualization recommendations for requirement risk and progress
+
 ---
 
 ## 5. Non-Functional Requirements
@@ -211,6 +221,7 @@ Output:
 - FastAPI
 - Uvicorn
 - Gemini API
+- Local NLP model fine-tuning pipeline (LoRA) for Gemini-reduction path
 
 ### Frontend
 

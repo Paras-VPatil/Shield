@@ -69,6 +69,13 @@
       "password_salt": "e39bdd1fb9280907",
       "password_hash": "0cf70467d2ed94211202a065973ec039d1facef1ec3b4a172d9988023545d27a",
       "created_at": "2026-02-20T15:18:12.745358+00:00"
+    },
+    {
+      "id": "21ddb520-e75e-44ea-aa23-48e716da2dcf",
+      "username": "try1244",
+      "password_salt": "4a2db15bdef3bc31",
+      "password_hash": "4beb8a3a7e376140994e1d15ae95be8aae8e0833ce7be69505f9ec002b944e11",
+      "created_at": "2026-02-27T08:58:07.827015+00:00"
     }
   ],
   "meetings": [
@@ -712,6 +719,288 @@
       "open_questions": [],
       "resolved_questions": [],
       "speaker_notes": []
+    },
+    {
+      "id": "df0d16fd-5aea-480f-8804-2db55fc52e08",
+      "title": "meeting 1",
+      "owner_id": "21ddb520-e75e-44ea-aa23-48e716da2dcf",
+      "created_at": "2026-02-27T08:58:42.074811+00:00",
+      "updated_at": "2026-02-27T09:52:41.757364+00:00",
+      "domains": [
+        "healthcare",
+        "legal",
+        "security"
+      ],
+      "minutes": [
+        {
+          "id": "a5fad388-414c-435c-8d6d-cb7e1aee8c38",
+          "source": "text",
+          "text": "Speaker 1: Hello. Hello.\nSpeaker 2: Last year we have been working on something that quietly fix one of the biggest blind spots in everyday healthcare. It's not another monitoring app, and it's definitely definitely not just a variable thing. Think more of like a layer that sits between the patient and the system. One that notices the things clinicians typically only catch after they become serious.\nSpeaker 2: Right, which is why we stopped at trying to label it too early. It's not just predictive care, it's not just risk detection. It's more like a way to translating signals that usually gets ignored.\nSpeaker 1: And the interesting part?\nSpeaker 1: Clinics only see the end result, but we see the transition point, the point where something starts to go off track. That's what everyone keeps wanting to know more about.\nSpeaker 3: Hello to walk you through what it picked up during the.\nSpeaker 3: The plot papile flesh especially in the case where a system reach almost 48 hours before before symptoms show. But before we get into specific, we need to understand the kind of environment you are running because the way it integrates depend heavily on the local workflow.",
+          "created_at": "2026-02-27T09:03:33.233433+00:00"
+        },
+        {
+          "id": "e96d7974-8eb8-4229-b24a-2bba9adb737a",
+          "source": "text",
+          "text": "Speaker 1: Whatever I speak here, it will be coming into this audio, audio status and text format and after some text they.\nSpeaker 2: I want a software where there, uh, there it's like a CM R software where it's like a customer management relation, customer relations management software where customers can write their feedback. And also, uh, it will be, uh, it will be reviewed by the, uh, company, company people and also they can give their feedback and there will be audit trailers as well.\nSpeaker 3: Sir.",
+          "created_at": "2026-02-27T09:52:36.048673+00:00"
+        },
+        {
+          "id": "c36eae1b-1699-4581-93d3-c86281438edc",
+          "source": "text",
+          "text": "Speaker 1: Whatever I speak here, it will be coming into this audio, audio status and text format and after some text they.\nSpeaker 2: I want a software where there, uh, there it's like a CM R software where it's like a customer management relation, customer relations management software where customers can write their feedback. And also, uh, it will be, uh, it will be reviewed by the, uh, company, company people and also they can give their feedback and there will be audit trailers as well.\nSpeaker 3: Sir.",
+          "created_at": "2026-02-27T09:52:41.757157+00:00"
+        }
+      ],
+      "analysis_history": [
+        {
+          "id": "d45dde82-780b-4af4-aba3-09214c8cd2fd",
+          "created_at": "2026-02-27T09:03:33.233513+00:00",
+          "input_text": "Speaker 1: Hello. Hello.\nSpeaker 2: Last year we have been working on something that quietly fix one of the biggest blind spots in everyday healthcare. It's not another monitoring app, and it's definitely definitely not just a variable thing. Think more of like a layer that sits between the patient and the system. One that notices the things clinicians typically only catch after they become serious.\nSpeaker 2: Right, which is why we stopped at trying to label it too early. It's not just predictive care, it's not just risk detection. It's more like a way to translating signals that usually gets ignored.\nSpeaker 1: And the interesting part?\nSpeaker 1: Clinics only see the end result, but we see the transition point, the point where something starts to go off track. That's what everyone keeps wanting to know more about.\nSpeaker 3: Hello to walk you through what it picked up during the.\nSpeaker 3: The plot papile flesh especially in the case where a system reach almost 48 hours before before symptoms show. But before we get into specific, we need to understand the kind of environment you are running because the way it integrates depend heavily on the local workflow.\nSpeaker 1: Hello. Hello.\nSpeaker 2: Last year we have been working on something that quietly fix one of the biggest blind spots in everyday healthcare. It's not another monitoring app, and it's definitely definitely not just a variable thing. Think more of like a layer that sits between the patient and the system. One that notices the things clinicians typically only catch after they become serious.\nSpeaker 2: Right, which is why we stopped at trying to label it too early. It's not just predictive care, it's not just risk detection. It's more like a way to translating signals that usually gets ignored.\nSpeaker 1: And the interesting part?\nSpeaker 1: Clinics only see the end result, but we see the transition point, the point where something starts to go off track. That's what everyone keeps wanting to know more about.\nSpeaker 3: Hello to walk you through what it picked up during the.\nSpeaker 3: The plot papile flesh especially in the case where a system reach almost 48 hours before before symptoms show. But before we get into specific, we need to understand the kind of environment you are running because the way it integrates depend heavily on the local workflow.",
+          "analysis": {
+            "status": "incomplete",
+            "message": "Analyzed 7 requirement(s). Overall status: incomplete.",
+            "domains": [
+              "healthcare",
+              "legal"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What specific patient information will be displayed?",
+              "What healthcare data privacy standards must be followed?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?",
+              "Which contract lifecycle stages are in scope for automation?",
+              "What legal approval checkpoints are required before finalization?",
+              "What evidence and versioning policy is required for traceability?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What specific patient information will be displayed?",
+              "What healthcare data privacy standards must be followed?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?",
+              "Which contract lifecycle stages are in scope for automation?",
+              "What legal approval checkpoints are required before finalization?",
+              "What evidence and versioning policy is required for traceability?"
+            ]
+          }
+        },
+        {
+          "id": "80534010-29a3-46ec-a137-e747bb29575d",
+          "created_at": "2026-02-27T09:52:36.048749+00:00",
+          "input_text": "Speaker 1: Whatever I speak here, it will be coming into this audio, audio status and text format and after some text they.\nSpeaker 2: I want a software where there, uh, there it's like a CM R software where it's like a customer management relation, customer relations management software where customers can write their feedback. And also, uh, it will be, uh, it will be reviewed by the, uh, company, company people and also they can give their feedback and there will be audit trailers as well.\nSpeaker 3: Sir.\nSpeaker 1: Whatever I speak here, it will be coming into this audio, audio status and text format and after some text they.\nSpeaker 2: I want a software where there, uh, there it's like a CM R software where it's like a customer management relation, customer relations management software where customers can write their feedback. And also, uh, it will be, uh, it will be reviewed by the, uh, company, company people and also they can give their feedback and there will be audit trailers as well.\nSpeaker 3: Sir.",
+          "analysis": {
+            "status": "incomplete",
+            "message": "Analyzed 3 requirement(s). Overall status: incomplete.",
+            "domains": [
+              "healthcare",
+              "security",
+              "legal"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?",
+              "What threat model and security baseline should this system follow?",
+              "What incident response and breach notification workflow is required?",
+              "What identity lifecycle controls are required for user onboarding/offboarding?",
+              "Which contract lifecycle stages are in scope for automation?",
+              "What legal approval checkpoints are required before finalization?",
+              "What evidence and versioning policy is required for traceability?"
+            ],
+            "resolved_now": [
+              "What audit trail depth is required for patient data changes?"
+            ],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What specific patient information will be displayed?",
+              "What healthcare data privacy standards must be followed?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "Which contract lifecycle stages are in scope for automation?",
+              "What legal approval checkpoints are required before finalization?",
+              "What evidence and versioning policy is required for traceability?",
+              "What AI analytics capabilities are required?",
+              "What threat model and security baseline should this system follow?",
+              "What incident response and breach notification workflow is required?",
+              "What identity lifecycle controls are required for user onboarding/offboarding?"
+            ]
+          }
+        },
+        {
+          "id": "221e8e6e-ba7e-42b7-86f7-252360fa6379",
+          "created_at": "2026-02-27T09:52:41.757358+00:00",
+          "input_text": "Speaker 1: Whatever I speak here, it will be coming into this audio, audio status and text format and after some text they.\nSpeaker 2: I want a software where there, uh, there it's like a CM R software where it's like a customer management relation, customer relations management software where customers can write their feedback. And also, uh, it will be, uh, it will be reviewed by the, uh, company, company people and also they can give their feedback and there will be audit trailers as well.\nSpeaker 3: Sir.\nSpeaker 1: Whatever I speak here, it will be coming into this audio, audio status and text format and after some text they.\nSpeaker 2: I want a software where there, uh, there it's like a CM R software where it's like a customer management relation, customer relations management software where customers can write their feedback. And also, uh, it will be, uh, it will be reviewed by the, uh, company, company people and also they can give their feedback and there will be audit trailers as well.\nSpeaker 3: Sir.",
+          "analysis": {
+            "status": "incomplete",
+            "message": "Analyzed 3 requirement(s). Overall status: incomplete.",
+            "domains": [
+              "healthcare",
+              "security",
+              "legal"
+            ],
+            "questions": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What AI analytics capabilities are required?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "What audit trail depth is required for patient data changes?",
+              "What threat model and security baseline should this system follow?",
+              "What incident response and breach notification workflow is required?",
+              "What identity lifecycle controls are required for user onboarding/offboarding?",
+              "Which contract lifecycle stages are in scope for automation?",
+              "What legal approval checkpoints are required before finalization?",
+              "What evidence and versioning policy is required for traceability?"
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              "Who is the primary actor performing this requirement?",
+              "What exact action should be performed?",
+              "What system component or entity is affected by this action?",
+              "What specific patient information will be displayed?",
+              "What healthcare data privacy standards must be followed?",
+              "Which clinical workflows are in scope for this release?",
+              "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+              "Which contract lifecycle stages are in scope for automation?",
+              "What legal approval checkpoints are required before finalization?",
+              "What evidence and versioning policy is required for traceability?",
+              "What AI analytics capabilities are required?",
+              "What threat model and security baseline should this system follow?",
+              "What incident response and breach notification workflow is required?",
+              "What identity lifecycle controls are required for user onboarding/offboarding?",
+              "What audit trail depth is required for patient data changes?"
+            ]
+          }
+        }
+      ],
+      "open_questions": [
+        "Who is the primary actor performing this requirement?",
+        "What exact action should be performed?",
+        "What system component or entity is affected by this action?",
+        "What specific patient information will be displayed?",
+        "What healthcare data privacy standards must be followed?",
+        "Which clinical workflows are in scope for this release?",
+        "What healthcare interoperability standards should be supported (FHIR/HL7)?",
+        "Which contract lifecycle stages are in scope for automation?",
+        "What legal approval checkpoints are required before finalization?",
+        "What evidence and versioning policy is required for traceability?",
+        "What AI analytics capabilities are required?",
+        "What threat model and security baseline should this system follow?",
+        "What incident response and breach notification workflow is required?",
+        "What identity lifecycle controls are required for user onboarding/offboarding?",
+        "What audit trail depth is required for patient data changes?"
+      ],
+      "resolved_questions": [
+        "What audit trail depth is required for patient data changes?"
+      ],
+      "speaker_notes": [
+        {
+          "id": "be33a86e-764c-400e-9783-606b6207af9a",
+          "speaker": "Speaker 1",
+          "text": "Hello. Hello.",
+          "created_at": "2026-02-27T09:03:33.233457+00:00"
+        },
+        {
+          "id": "0d5ff75c-2aba-4e5e-8e39-f60df55eb00d",
+          "speaker": "Speaker 2",
+          "text": "Last year we have been working on something that quietly fix one of the biggest blind spots in everyday healthcare. It's not another monitoring app, and it's definitely definitely not just a variable thing. Think more of like a layer that sits between the patient and the system. One that notices the things clinicians typically only catch after they become serious.",
+          "created_at": "2026-02-27T09:03:33.233476+00:00"
+        },
+        {
+          "id": "2bac86ad-531c-4da1-9e35-03538690fb05",
+          "speaker": "Speaker 2",
+          "text": "Right, which is why we stopped at trying to label it too early. It's not just predictive care, it's not just risk detection. It's more like a way to translating signals that usually gets ignored.",
+          "created_at": "2026-02-27T09:03:33.233483+00:00"
+        },
+        {
+          "id": "1d1657ee-69e8-49e0-b40d-70927131f47e",
+          "speaker": "Speaker 1",
+          "text": "And the interesting part?",
+          "created_at": "2026-02-27T09:03:33.233489+00:00"
+        },
+        {
+          "id": "0b345218-6813-4a22-852b-e7a0d96b21bc",
+          "speaker": "Speaker 1",
+          "text": "Clinics only see the end result, but we see the transition point, the point where something starts to go off track. That's what everyone keeps wanting to know more about.",
+          "created_at": "2026-02-27T09:03:33.233495+00:00"
+        },
+        {
+          "id": "bde4af82-ad73-459a-810b-438c85315344",
+          "speaker": "Speaker 3",
+          "text": "Hello to walk you through what it picked up during the.",
+          "created_at": "2026-02-27T09:03:33.233501+00:00"
+        },
+        {
+          "id": "448865ff-2765-4d6e-8e32-36fe2d3da21b",
+          "speaker": "Speaker 3",
+          "text": "The plot papile flesh especially in the case where a system reach almost 48 hours before before symptoms show. But before we get into specific, we need to understand the kind of environment you are running because the way it integrates depend heavily on the local workflow.",
+          "created_at": "2026-02-27T09:03:33.233507+00:00"
+        },
+        {
+          "id": "15e748d4-dc88-48ba-814b-d4131c5739d6",
+          "speaker": "Speaker 1",
+          "text": "Whatever I speak here, it will be coming into this audio, audio status and text format and after some text they.",
+          "created_at": "2026-02-27T09:52:36.048709+00:00"
+        },
+        {
+          "id": "76d653e5-9732-46ea-a109-a7cb354e26a9",
+          "speaker": "Speaker 2",
+          "text": "I want a software where there, uh, there it's like a CM R software where it's like a customer management relation, customer relations management software where customers can write their feedback. And also, uh, it will be, uh, it will be reviewed by the, uh, company, company people and also they can give their feedback and there will be audit trailers as well.",
+          "created_at": "2026-02-27T09:52:36.048724+00:00"
+        },
+        {
+          "id": "3226a82c-356e-47ed-9efb-15fd52e7d770",
+          "speaker": "Speaker 3",
+          "text": "Sir.",
+          "created_at": "2026-02-27T09:52:36.048735+00:00"
+        },
+        {
+          "id": "b7027857-1941-4024-b002-0c531414ba4e",
+          "speaker": "Speaker 1",
+          "text": "Whatever I speak here, it will be coming into this audio, audio status and text format and after some text they.",
+          "created_at": "2026-02-27T09:52:41.757189+00:00"
+        },
+        {
+          "id": "de001750-a633-4f01-932e-6ced627bcd6a",
+          "speaker": "Speaker 2",
+          "text": "I want a software where there, uh, there it's like a CM R software where it's like a customer management relation, customer relations management software where customers can write their feedback. And also, uh, it will be, uh, it will be reviewed by the, uh, company, company people and also they can give their feedback and there will be audit trailers as well.",
+          "created_at": "2026-02-27T09:52:41.757201+00:00"
+        },
+        {
+          "id": "ae0dd980-290a-4fde-8390-bcdd66b790ab",
+          "speaker": "Speaker 3",
+          "text": "Sir.",
+          "created_at": "2026-02-27T09:52:41.757346+00:00"
+        }
+      ]
+    },
+    {
+      "id": "23af6759-e729-4a41-940b-5a53e29a7720",
+      "title": "meeting",
+      "owner_id": "21ddb520-e75e-44ea-aa23-48e716da2dcf",
+      "created_at": "2026-02-27T09:51:00.194738+00:00",
+      "updated_at": "2026-02-27T09:51:00.194763+00:00",
+      "domains": [],
+      "minutes": [],
+      "analysis_history": [],
+      "open_questions": [],
+      "resolved_questions": [],
+      "speaker_notes": []
     }
   ],
   "sessions": [
@@ -744,6 +1033,11 @@
       "token": "hQQVlU-ezQanF2QENEzg-5guw88N8FEj4wUmV8-kPlw",
       "user_id": "cbc99586-c6f2-418e-9745-6b1e17a63f19",
       "created_at": "2026-02-20T15:52:09.264501+00:00"
+    },
+    {
+      "token": "N44lSBvYLeVjhaaf9rzp7_-sAV3LO__61DeKXF4D3JM",
+      "user_id": "21ddb520-e75e-44ea-aa23-48e716da2dcf",
+      "created_at": "2026-02-27T08:58:07.858140+00:00"
     }
   ]
 }

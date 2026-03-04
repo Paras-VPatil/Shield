@@ -9,7 +9,7 @@ from app.core.settings import get_settings
 class LLMService:
     def __init__(self) -> None:
         self.settings = get_settings()
-        self.model = get_gemini_model()
+        self.model = None
 
     def summarize(
         self,
@@ -48,6 +48,8 @@ class LLMService:
         )
 
     def _summarize_with_gemini(self, prompt: str) -> Optional[str]:
+        if self.model is None:
+            self.model = get_gemini_model()
         if self.model is None:
             return None
         try:
