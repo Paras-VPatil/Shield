@@ -3,12 +3,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
 from app.core.settings import get_settings
+from fastapi.staticfiles import StaticFiles
 from app.routes.analyze import router as analyze_router
 from app.routes.auth import router as auth_router
 from app.routes.meetings import router as meetings_router
 
 settings = get_settings()
 app = FastAPI(title=settings.app_name, version=settings.app_version)
+
+# Mount frontend static files
+import os
+frontend_path = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend"))
+if os.path.exists(frontend_path):
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 origins = [origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()]
 if not origins:
@@ -26,10 +33,13 @@ app.include_router(analyze_router)
 app.include_router(auth_router)
 app.include_router(meetings_router)
 
-
 @app.get("/health")
 async def health_check() -> dict[str, str]:
     return {"status": "ok"}
+
+# Mount frontend at root (must be after routers)
+if os.path.exists(frontend_path):
+    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 
 
 @app.get("/favicon.ico", include_in_schema=False)

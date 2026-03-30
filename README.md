@@ -17,9 +17,8 @@ AI-powered software requirement analysis and ambiguity detection system.
 - PDF minutes upload and continuation from previous meetings
 - Meeting transcript export as downloadable `.txt`
 - LLM summarization modes:
-  - `auto` (try local Ollama, then Gemini, then fallback)
-  - `ollama` / `local` (offline/local-first)
-  - `gemini`
+  - `local` (offline/local-first using fine-tuned Phi-3.5)
+  - `ollama` (local Ollama instance)
   - deterministic fallback when model unavailable
 - Enhanced frontend workflow page for auth, meeting records, PDF upload, and analysis
 
@@ -42,9 +41,7 @@ pip install -r requirements.txt
 3. Set environment variables in `backend/.env`:
 
 ```bash
-GEMINI_API_KEY=your_key_here
-GEMINI_MODEL=gemini-1.5-flash
-LLM_MODE=auto
+LLM_MODE=local
 OLLAMA_URL=http://127.0.0.1:11434
 OLLAMA_MODEL=llama3.2
 CORS_ORIGINS=*
@@ -127,5 +124,6 @@ uvicorn app.main:app --host 0.0.0.0 --port 10000
 Set environment variable:
 
 ```bash
-GEMINI_API_KEY=xxxxx
+LLM_MODE=local
+OLLAMA_URL=xxxx
 ```

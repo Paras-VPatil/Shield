@@ -40,6 +40,8 @@ class AnalysisSnapshot(BaseModel):
     questions: list[str] = Field(default_factory=list)
     resolved_now: list[str] = Field(default_factory=list)
     open_after_analysis: list[str] = Field(default_factory=list)
+    sprint_plan: list[dict] = Field(default_factory=list)
+    proprietary_tool_suggestions: list[str] = Field(default_factory=list)
 
 
 class AnalysisHistoryEntry(BaseModel):

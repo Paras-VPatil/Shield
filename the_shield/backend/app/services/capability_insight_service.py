@@ -199,4 +199,6 @@ def build_capability_insights(
             "Trend chart of open vs resolved clarification questions per meeting iteration.",
             "Domain-wise risk radar linking detected gaps to service and business impact.",
         ],
+        "sprint_plan": [],
+        "proprietary_tool_suggestions": [],
     }

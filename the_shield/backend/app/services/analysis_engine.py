@@ -64,13 +64,23 @@ def run_requirement_analysis(
         requirement_text=context_payload,
         domains=detected_domains,
     )
-    capability_insights = build_capability_insights(
+    llm_insights = llm_service.extract_capability_insights(context_payload)
+    rule_insights = build_capability_insights(
         text=context_payload,
         item_analyses=item_analyses,
         missing_fields=all_missing_fields,
         domain_gaps=all_domain_gaps,
         domains=detected_domains,
     )
+
+    # Merge or prefer LLM insights
+    capability_insights = rule_insights.copy()
+    if llm_insights:
+        for key, value in llm_insights.items():
+            if key in capability_insights and value:
+                # For scores, we might prefer the model if it's explicitly trained
+                # For lists, we can extend or replace. Let's replace for now if LLM provides them.
+                capability_insights[key] = value
     parsed = item_analyses[0].parsed.model_dump() if item_analyses else parse_requirement(text)
     message = (
         f"Analyzed {len(requirement_items)} requirement(s). "

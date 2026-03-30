@@ -7,6 +7,7 @@ from app.models.response_models import (
     MeetingAnalyzeResponse,
     MeetingDetailResponse,
     MeetingSummary,
+    RevisionResponse,
 )
 from app.services.llm_service import LLMService
 from app.services.meeting_service import (
@@ -15,6 +16,7 @@ from app.services.meeting_service import (
     create_meeting,
     export_meeting_transcript,
     get_meeting,
+    get_meeting_revisions,
     list_meetings,
 )
 
@@ -111,3 +113,15 @@ async def download_meeting_transcript(
     response = PlainTextResponse(content=transcript)
     response.headers["Content-Disposition"] = f'attachment; filename="meeting-{meeting_id}.txt"'
     return response
+
+
+@router.get("/{meeting_id}/revisions", response_model=RevisionResponse)
+async def get_meeting_revisions_endpoint(
+    meeting_id: str,
+    user: dict = Depends(get_current_user),
+) -> RevisionResponse:
+    try:
+        revisions = get_meeting_revisions(user["id"], meeting_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    return RevisionResponse(**revisions)

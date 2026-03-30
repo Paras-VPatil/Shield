@@ -33,29 +33,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-bg-light text-slate-900 dark:bg-bg-dark dark:text-slate-100 font-display transition-colors duration-300">
-  <header class="sticky top-0 z-50 border-b border-slate-200/80 bg-bg-light/85 backdrop-blur-md dark:border-slate-800 dark:bg-bg-dark/80">
-    <div class="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
-      <div class="flex items-center gap-3">
-        <div class="grid h-7 w-7 place-items-center rounded-sm bg-slate-900 dark:bg-white">
-          <svg class="h-4 w-4 text-white dark:text-black" fill="currentColor" viewBox="0 0 48 48" aria-hidden="true">
-            <path d="M6 6H42L36 24L42 42H6L12 24L6 6Z"></path>
-          </svg>
+  <header class="sticky top-0 z-50 border-b border-slate-200/20 bg-white/70 backdrop-blur-xl dark:border-slate-800/30 dark:bg-bg-dark/70">
+    <div class="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
+      <div class="flex items-center gap-4">
+        <div class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/20">
+          <span class="material-symbols-outlined text-2xl">shield_with_heart</span>
         </div>
-        <span class="text-lg font-bold tracking-tight">RequiMind</span>
+        <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400">RequiMind AI</span>
       </div>
-      <nav class="hidden items-center gap-6 md:flex">
-        <a class="text-sm text-slate-600 transition-colors hover:text-primary dark:text-slate-400" href="#workflow">Workflow</a>
-        <a class="text-sm text-slate-600 transition-colors hover:text-primary dark:text-slate-400" href="#workspace">Workspace</a>
-        <a class="text-sm text-slate-600 transition-colors hover:text-primary dark:text-slate-400" href="#faq">FAQ</a>
+      <nav class="hidden items-center gap-8 md:flex">
+        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white" href="#workflow">Workflow</a>
+        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white" href="#workspace">Workspace</a>
+        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white" href="#faq">FAQ</a>
       </nav>
-      <div class="flex items-center gap-3">
-        <button id="openLoginBtn" type="button" class="rounded-full px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:text-primary dark:text-slate-300">Log in</button>
-        <button id="switchAccountBtn" type="button" class="hidden rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-300">Switch</button>
+      <div class="flex items-center gap-4">
+        <button id="openLoginBtn" type="button" class="btn-secondary px-6">Log in</button>
         <div id="profileBox" class="profile-box hidden">
           <div id="profileAvatar" class="avatar-chip">U</div>
-          <div>
-            <p id="profileName" class="text-sm font-semibold">user</p>
-            <button id="logoutBtn" type="button" class="text-xs text-slate-500 underline dark:text-slate-400">Logout</button>
+          <div class="hidden sm:block">
+            <p id="profileName" class="text-sm font-bold">user</p>
+            <button id="logoutBtn" type="button" class="text-xs text-slate-500 hover:text-primary transition-colors">Logout</button>
           </div>
         </div>
       </div>
@@ -183,7 +180,7 @@
             <h3 class="panel-title">API Configuration</h3>
             <label class="field-label" for="apiBase">API Base URL</label>
             <input id="apiBase" type="text" value="http://127.0.0.1:8000">
-            <p class="hint-text">Backend can use local/offline Ollama or Gemini depending on server settings.</p>
+            <p class="hint-text">Backend uses local/offline models for 100% data privacy.</p>
           </section>
 
           <section class="workspace-card">
@@ -297,9 +294,27 @@
           <h4 class="sub-title">Per-Requirement Analysis</h4>
           <div id="itemAnalyses" class="cards"></div>
 
-          <h4 class="sub-title">NLP Capability Insights</h4>
-          <p><strong>Complexity Score:</strong> <span id="complexityScore"></span></p>
-          <p><strong>Decision Readiness Score:</strong> <span id="decisionReadinessScore"></span></p>
+          <h4 class="sub-title text-slate-400">NLP Capability Insights</h4>
+          <div class="space-y-4 mb-6">
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium">Complexity Score</span>
+                <span id="complexityScore" class="text-sm font-medium">0</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2 dark:bg-slate-700">
+                <div id="complexityBar" class="bg-primary h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium">Decision Readiness Score</span>
+                <span id="decisionReadinessScore" class="text-sm font-medium">0</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2 dark:bg-slate-700">
+                <div id="decisionReadinessBar" class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
 
           <h5 class="sub-title">Top Concepts</h5>
           <ul id="topConcepts" class="list-box"></ul>
@@ -316,15 +331,38 @@
           <h5 class="sub-title">Stakeholder Communication Plan</h5>
           <ul id="stakeholderComms" class="list-box"></ul>
 
-          <h5 class="sub-title">Visualization Recommendations</h5>
-          <ul id="visualRecommendations" class="list-box"></ul>
+          <div id="sprintSection" class="mt-8 border-t border-slate-200/10 pt-8">
+            <div class="flex items-center gap-2 mb-6">
+              <span class="material-symbols-outlined text-primary">dynamic_feed</span>
+              <h4 class="text-xl font-bold">Sprint Roadmap</h4>
+            </div>
+            <div id="sprintPlan" class="grid gap-6 md:grid-cols-3">
+              <!-- Sprint cards go here -->
+            </div>
+          </div>
 
-          <h4 class="sub-title">LLM Summary</h4>
-          <p id="summary"></p>
+          <div id="toolingSection" class="mt-8 border-t border-slate-200/10 pt-8">
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">token</span>
+                <h4 class="text-xl font-bold">Strategic Tooling</h4>
+              </div>
+              <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Proprietary Only</span>
+            </div>
+            <ul id="toolSuggestions" class="grid gap-3 sm:grid-cols-2"></ul>
+          </div>
+
+          <div class="mt-8 border-t border-slate-200/10 pt-8">
+            <h4 class="sub-title">LLM Executive Summary</h4>
+            <div class="glass-card p-6 italic text-slate-400" id="summary"></div>
+          </div>
         </section>
 
         <section class="workspace-card mt-6">
-          <h3 class="panel-title">Meeting History</h3>
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="panel-title mb-0">Meeting History</h3>
+            <button id="viewRevisionsBtn" class="btn-secondary text-xs py-1 hidden">View Revised Insights</button>
+          </div>
           <div id="meetingHistory" class="history"><p>No meeting selected.</p></div>
         </section>
 
@@ -345,6 +383,18 @@
         <button id="registerBtn" type="button" class="btn-secondary">Register</button>
         <button id="loginBtn" type="button" class="btn-primary">Login</button>
         <button id="closeLoginBtn" type="button" class="btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="revisionsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="revisionsModalTitle">
+    <div class="modal-card max-w-4xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 id="revisionsModalTitle" class="text-2xl font-bold">Revised Insights</h2>
+        <button id="closeRevisionsBtn" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+      <div id="revisionsContent" class="space-y-6 overflow-y-auto max-h-[70vh]">
+        <!-- Revision content injected here -->
       </div>
     </div>
   </div>

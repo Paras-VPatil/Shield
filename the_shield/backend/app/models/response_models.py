@@ -20,6 +20,22 @@ class RequirementItemAnalysis(BaseModel):
     questions: List[str] = Field(default_factory=list)
 
 
+class SprintTask(BaseModel):
+    task: str
+    story_points: int = Field(default=1, ge=1)
+    status: Literal["todo", "in_progress", "done"] = "todo"
+
+class Sprint(BaseModel):
+    number: int
+    goal: str
+    timeline: str
+    tasks: List[SprintTask] = Field(default_factory=list)
+
+class ToolSuggestion(BaseModel):
+    name: str
+    category: str
+    reasoning: Optional[str] = None
+
 class CapabilityInsights(BaseModel):
     complexity_score: int = Field(default=0, ge=0, le=100)
     decision_readiness_score: int = Field(default=0, ge=0, le=100)
@@ -29,6 +45,8 @@ class CapabilityInsights(BaseModel):
     business_opportunities: List[str] = Field(default_factory=list)
     stakeholder_communications: List[str] = Field(default_factory=list)
     visualization_recommendations: List[str] = Field(default_factory=list)
+    sprint_plan: List[Sprint] = Field(default_factory=list)
+    proprietary_tool_suggestions: List[ToolSuggestion] = Field(default_factory=list)
 
 
 class AnalyzeResponse(BaseModel):
@@ -79,3 +97,15 @@ class MeetingAnalyzeResponse(AnalyzeResponse):
     meeting_id: str
     open_questions: List[str] = Field(default_factory=list)
     resolved_questions: List[str] = Field(default_factory=list)
+
+class RevisionResponse(BaseModel):
+    meeting_id: str
+    previous_id: str | None = None
+    current_id: str
+    added_requirements: List[str] = Field(default_factory=list)
+    removed_requirements: List[str] = Field(default_factory=list)
+    added_questions: List[str] = Field(default_factory=list)
+    removed_questions: List[str] = Field(default_factory=list)
+    status_changed: bool = False
+    old_status: str | None = None
+    new_status: str | None = None

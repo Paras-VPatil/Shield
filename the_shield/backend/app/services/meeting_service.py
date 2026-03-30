@@ -265,6 +265,8 @@ def analyze_meeting_content(
             "questions": analysis["questions"],
             "resolved_now": resolved_now,
             "open_after_analysis": meeting["open_questions"],
+            "sprint_plan": analysis.get("capability_insights", {}).get("sprint_plan", []),
+            "proprietary_tool_suggestions": analysis.get("capability_insights", {}).get("proprietary_tool_suggestions", []),
         },
     }
     meeting["analysis_history"].append(history_entry)
@@ -356,3 +358,43 @@ def export_meeting_transcript(user_id: str, meeting_id: str) -> str:
     lines.append("")
 
     return "\n".join(lines)
+
+
+def get_meeting_revisions(user_id: str, meeting_id: str) -> dict:
+    data = load_db()
+    meeting = next(
+        (meeting for meeting in data["meetings"] if meeting["id"] == meeting_id and meeting["owner_id"] == user_id),
+        None,
+    )
+    if meeting is None:
+        raise ValueError("Meeting not found.")
+
+    history = meeting.get("analysis_history", [])
+    if len(history) < 1:
+        raise ValueError("No analysis history yet.")
+
+    current = history[-1]
+    previous = history[-2] if len(history) > 1 else None
+
+    # For now, let's extract requirements from the input text as a proxy for diff
+    # In a real app, we'd use the stored 'extracted_requirements' if we saved them in the snapshot
+    # Since we didn't save them in the snapshot yet, let's just Compare the analysis status and questions
+    
+    curr_snap = current["analysis"]
+    prev_snap = previous["analysis"] if previous else {}
+
+    added_questions = [q for q in curr_snap.get("questions", []) if q not in prev_snap.get("questions", [])]
+    removed_questions = [q for q in prev_snap.get("questions", []) if q not in curr_snap.get("questions", [])]
+
+    return {
+        "meeting_id": meeting_id,
+        "previous_id": previous["id"] if previous else None,
+        "current_id": current["id"],
+        "added_requirements": [], # Placeholder as we don't store them in snapshot yet
+        "removed_requirements": [],
+        "added_questions": added_questions,
+        "removed_questions": removed_questions,
+        "status_changed": prev_snap.get("status") != curr_snap.get("status") if previous else False,
+        "old_status": prev_snap.get("status"),
+        "new_status": curr_snap.get("status"),
+    }
