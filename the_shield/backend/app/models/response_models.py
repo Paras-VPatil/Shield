@@ -17,7 +17,9 @@ class RequirementItemAnalysis(BaseModel):
     parsed: ParseResult
     missing_fields: List[str] = Field(default_factory=list)
     domain_gaps: List[str] = Field(default_factory=list)
-    questions: List[str] = Field(default_factory=list)
+    questions: List[dict] = Field(default_factory=list)
+    classification: Optional[str] = Field(default="Functional")
+    moscow_priority: Optional[str] = Field(default="Should Have")
 
 
 class SprintTask(BaseModel):
@@ -45,6 +47,10 @@ class CapabilityInsights(BaseModel):
     business_opportunities: List[str] = Field(default_factory=list)
     stakeholder_communications: List[str] = Field(default_factory=list)
     visualization_recommendations: List[str] = Field(default_factory=list)
+    key_decisions: List[str] = Field(default_factory=list)
+    risk_flags: List[str] = Field(default_factory=list)
+    dependency_map: List[str] = Field(default_factory=list)
+    stakeholder_impact: List[str] = Field(default_factory=list)
     sprint_plan: List[Sprint] = Field(default_factory=list)
     proprietary_tool_suggestions: List[ToolSuggestion] = Field(default_factory=list)
 
@@ -55,7 +61,7 @@ class AnalyzeResponse(BaseModel):
     parsed: ParseResult
     missing_fields: List[str] = Field(default_factory=list)
     domain_gaps: List[str] = Field(default_factory=list)
-    questions: List[str] = Field(default_factory=list)
+    questions: List[dict] = Field(default_factory=list)
     domains: List[str] = Field(default_factory=list)
     extracted_requirements: List[str] = Field(default_factory=list)
     item_analyses: List[RequirementItemAnalysis] = Field(default_factory=list)

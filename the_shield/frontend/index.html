@@ -1,5 +1,6 @@
 <!doctype html>
 <html class="dark" lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,8 +8,10 @@
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -32,19 +35,27 @@
   </script>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-bg-light text-slate-900 dark:bg-bg-dark dark:text-slate-100 font-display transition-colors duration-300">
-  <header class="sticky top-0 z-50 border-b border-slate-200/20 bg-white/70 backdrop-blur-xl dark:border-slate-800/30 dark:bg-bg-dark/70">
+
+<body
+  class="bg-bg-light text-slate-900 dark:bg-bg-dark dark:text-slate-100 font-display transition-colors duration-300">
+  <header
+    class="sticky top-0 z-50 border-b border-slate-200/20 bg-white/70 backdrop-blur-xl dark:border-slate-800/30 dark:bg-bg-dark/70">
     <div class="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
       <div class="flex items-center gap-4">
-        <div class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/20">
+        <div
+          class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/20">
           <span class="material-symbols-outlined text-2xl">shield_with_heart</span>
         </div>
-        <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400">RequiMind AI</span>
+        <span
+          class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400">RequiMind</span>
       </div>
       <nav class="hidden items-center gap-8 md:flex">
-        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white" href="#workflow">Workflow</a>
-        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white" href="#workspace">Workspace</a>
-        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white" href="#faq">FAQ</a>
+        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
+          href="#workflow">Workflow</a>
+        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
+          href="#workspace">Workspace</a>
+        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
+          href="#faq">FAQ</a>
       </nav>
       <div class="flex items-center gap-4">
         <button id="openLoginBtn" type="button" class="btn-secondary px-6">Log in</button>
@@ -52,7 +63,8 @@
           <div id="profileAvatar" class="avatar-chip">U</div>
           <div class="hidden sm:block">
             <p id="profileName" class="text-sm font-bold">user</p>
-            <button id="logoutBtn" type="button" class="text-xs text-slate-500 hover:text-primary transition-colors">Logout</button>
+            <button id="logoutBtn" type="button"
+              class="text-xs text-slate-500 hover:text-primary transition-colors">Logout</button>
           </div>
         </div>
       </div>
@@ -65,8 +77,11 @@
         <div class="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center">
           <div class="relative mb-12 flex h-64 w-64 items-center justify-center">
             <div class="absolute inset-0 rounded-full bg-primary/20 blur-3xl"></div>
-            <div class="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/15 p-2 dark:bg-slate-900/40">
-              <img class="h-full w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=900&q=80" alt="Abstract holographic shield concept">
+            <div
+              class="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/15 p-2 dark:bg-slate-900/40">
+              <img class="h-full w-full rounded-xl object-cover"
+                src="https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=900&q=80"
+                alt="Abstract holographic shield concept">
             </div>
           </div>
 
@@ -74,16 +89,23 @@
             Build <span class="text-primary">requirement clarity</span> from every meeting
           </h1>
           <p class="mb-10 max-w-2xl text-lg text-slate-600 dark:text-slate-400 md:text-xl">
-            Capture discussions, extract requirements, detect ambiguity gaps, and auto-generate clarification questions in one continuous workflow.
+            Capture discussions, extract requirements, detect ambiguity gaps, and auto-generate clarification questions
+            in one continuous workflow.
           </p>
 
-          <div class="w-full max-w-2xl rounded-full border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          <div
+            class="w-full max-w-2xl rounded-full border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-800 dark:bg-slate-900">
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined ml-3 text-slate-400">search</span>
-              <input class="w-full border-none bg-transparent px-3 py-2 text-base text-slate-800 placeholder:text-slate-500 focus:ring-0 dark:text-white" placeholder="Describe your next discovery meeting..." type="text" aria-label="Discovery prompt">
-              <button id="getStartedBtn" type="button" class="rounded-full bg-primary px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-600">Get Started</button>
+              <input
+                class="w-full border-none bg-transparent px-3 py-2 text-base text-slate-800 placeholder:text-slate-500 focus:ring-0 dark:text-white"
+                placeholder="Describe your next discovery meeting..." type="text" aria-label="Discovery prompt">
+              <button id="getStartedBtn" type="button"
+                class="rounded-full bg-primary px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-600">Get
+                Started</button>
             </div>
-          </div>          <ul class="mt-8 flex flex-wrap justify-center gap-3 opacity-70" role="list">
+          </div>
+          <ul class="mt-8 flex flex-wrap justify-center gap-3 opacity-70" role="list">
             <li class="chip">Gap Detection</li>
             <li class="chip">Live Analysis</li>
             <li class="chip">Speaker Tracking</li>
@@ -97,41 +119,50 @@
         <div class="mx-auto grid w-full max-w-7xl gap-16 px-6 lg:grid-cols-2">
           <div class="space-y-6">
             <h2 class="text-3xl font-bold md:text-4xl">How RequiMind works</h2>
-            <p class="text-lg leading-relaxed text-slate-600 dark:text-slate-400">Your team captures notes or audio, RequiMind distills requirements, tracks unresolved questions, and preserves full meeting intelligence over time.</p>
+            <p class="text-lg leading-relaxed text-slate-600 dark:text-slate-400">Your team captures notes or audio,
+              RequiMind distills requirements, tracks unresolved questions, and preserves full meeting intelligence over
+              time.</p>
             <div class="grid gap-4 sm:grid-cols-2">
               <article class="glass-card p-5">
                 <span class="material-symbols-outlined mb-2 text-3xl text-primary">tune</span>
                 <h3 class="font-semibold">Structured Analysis</h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Domain detection, requirement extraction, and status tagging for every input.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Domain detection, requirement extraction, and
+                  status tagging for every input.</p>
               </article>
               <article class="glass-card p-5">
                 <span class="material-symbols-outlined mb-2 text-3xl text-primary">graphic_eq</span>
                 <h3 class="font-semibold">Audio Intelligence</h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Auto speaker clustering and transcript-driven requirement capture.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Auto speaker clustering and transcript-driven
+                  requirement capture.</p>
               </article>
             </div>
             <div class="grid gap-3 pt-2">
               <article class="glass-card p-4">
                 <h4 class="font-semibold">Complex Problem Intelligence</h4>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Investigate, analyze, visualize, articulate, and solve complex requirement concepts with disciplined decision support.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Investigate, analyze, visualize, articulate, and
+                  solve complex requirement concepts with disciplined decision support.</p>
               </article>
               <article class="glass-card p-4">
                 <h4 class="font-semibold">Service Improvement Discovery</h4>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Identify and explore opportunities to improve service quality and delivery outcomes.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Identify and explore opportunities to improve
+                  service quality and delivery outcomes.</p>
               </article>
               <article class="glass-card p-4">
                 <h4 class="font-semibold">Business Opportunity Detection</h4>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Pinpoint business opportunities that help organizations operate more effectively.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Pinpoint business opportunities that help
+                  organizations operate more effectively.</p>
               </article>
               <article class="glass-card p-4">
                 <h4 class="font-semibold">Stakeholder Communication</h4>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Understand requirements and disseminate actionable decisions to multiple stakeholders.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Understand requirements and disseminate actionable
+                  decisions to multiple stakeholders.</p>
               </article>
             </div>
           </div>
 
           <div id="faq" class="space-y-2">
-            <h3 class="mb-4 flex items-center gap-2 text-xl font-bold"><span class="material-symbols-outlined text-primary">help</span>Frequently Asked Questions</h3>
+            <h3 class="mb-4 flex items-center gap-2 text-xl font-bold"><span
+                class="material-symbols-outlined text-primary">help</span>Frequently Asked Questions</h3>
             <details class="faq-item" open>
               <summary>Can I analyze only typed notes?</summary>
               <p>Yes. You can run live and full analysis using typed requirements without recording audio.</p>
@@ -155,24 +186,33 @@
       <section class="py-28">
         <div class="mx-auto w-full max-w-7xl px-6">
           <div class="relative overflow-hidden rounded-3xl bg-primary p-12 text-center">
-            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 36px 36px;"></div>
-            <h2 class="relative z-10 text-3xl font-bold text-white md:text-5xl">From discussion to decision in minutes</h2>
-            <p class="relative z-10 mx-auto mt-4 max-w-xl text-lg text-blue-100">Open the workspace and run your first meeting analysis flow end-to-end.</p>
-            <button type="button" id="ctaStartBtn" class="relative z-10 mt-8 rounded-full bg-white px-9 py-3 text-base font-bold text-primary transition-colors hover:bg-blue-50">Launch Workspace</button>
+            <div class="absolute inset-0 opacity-20"
+              style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 36px 36px;">
+            </div>
+            <h2 class="relative z-10 text-3xl font-bold text-white md:text-5xl">From discussion to decision in minutes
+            </h2>
+            <p class="relative z-10 mx-auto mt-4 max-w-xl text-lg text-blue-100">Open the workspace and run your first
+              meeting analysis flow end-to-end.</p>
+            <button type="button" id="ctaStartBtn"
+              class="relative z-10 mt-8 rounded-full bg-white px-9 py-3 text-base font-bold text-primary transition-colors hover:bg-blue-50">Launch
+              Workspace</button>
           </div>
         </div>
       </section>
 
-      <footer class="border-t border-slate-200 bg-slate-100/80 py-10 text-center text-sm text-slate-500 dark:border-slate-900 dark:bg-slate-950/70 dark:text-slate-400">
+      <footer
+        class="border-t border-slate-200 bg-slate-100/80 py-10 text-center text-sm text-slate-500 dark:border-slate-900 dark:bg-slate-950/70 dark:text-slate-400">
         RequiMind AI workspace for meeting-driven requirement intelligence.
       </footer>
     </section>
 
     <section id="appView" class="hidden pb-20 pt-10">
       <div class="mx-auto w-full max-w-7xl px-6" id="workspace">
-        <div class="mb-8 rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-xl dark:border-slate-800 dark:bg-card-dark/70">
+        <div
+          class="mb-8 rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-xl dark:border-slate-800 dark:bg-card-dark/70">
           <h2 class="text-2xl font-bold">Requirement Intelligence Workspace</h2>
-          <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Configure your backend, manage meetings, capture input, and analyze outcomes.</p>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Configure your backend, manage meetings, capture
+            input, and analyze outcomes.</p>
         </div>
 
         <div class="grid gap-6 lg:grid-cols-2">
@@ -210,160 +250,138 @@
             </details>
           </section>
 
-          <section class="workspace-card">
-            <h3 class="panel-title">Input Notes</h3>
-            <label class="field-label" for="requirementText">Requirement Text / Meeting Notes</label>
-            <textarea id="requirementText" rows="8" placeholder="Type points or paragraphs here."></textarea>
+          <section id="step1_Input" class="workspace-card lg:col-span-2">
+            <h3 class="panel-title">Step 1: Unified Requirement Input</h3>
+            <p class="hint-text mb-4">Input via Text, Audio, or Document Upload. All inputs will be merged for analysis.
+            </p>
 
-            <h4 class="sub-title">Detected Requirements (Live)</h4>
-            <ul id="liveRequirements" class="list-box"></ul>
-
-            <div class="live-box">
-              <p><strong>Live Status:</strong> <span id="liveStatus" aria-live="polite">Waiting for input...</span></p>
-              <h4 class="sub-title">Live Domains</h4>
-              <ul id="liveDomains" class="list-box" aria-live="polite"></ul>
-              <h4 class="sub-title">Live Ambiguity Gaps</h4>
-              <ul id="liveDomainGaps" class="list-box" aria-live="polite"></ul>
-              <h4 class="sub-title">Live Clarification Questions</h4>
-              <ul id="liveQuestions" class="list-box" aria-live="polite"></ul>
-            </div>
-
-            <button id="analyzeBtn" type="button" class="btn-primary mt-4">Analyze Current Input</button>
-          </section>
-
-          <section class="workspace-card">
-            <h3 class="panel-title">Audio Tracking</h3>
-            <p class="hint-text">Automatic speaker identification uses voice signature clustering (best effort on browser audio).</p>
-
-            <label class="check-row">
-              <input id="autoSpeakerToggle" type="checkbox" checked>
-              Auto identify speaker from voice
-            </label>
-            <label class="check-row">
-              <input id="audioAsPrimary" type="checkbox" checked>
-              Use captured audio as primary meeting content
-            </label>
-
-            <div class="grid gap-3 sm:grid-cols-2">
+            <div class="grid gap-6 md:grid-cols-2">
+              <!-- Text / Combined Area -->
               <div>
-                <label class="field-label" for="speakerName">Manual Speaker Name (optional)</label>
-                <input id="speakerName" type="text" placeholder="Doctor / PM / Analyst">
+                <label class="field-label" for="requirementText">Requirement Notes & Merged Content</label>
+                <textarea id="requirementText" rows="10"
+                  placeholder="Type notes here or use voice/upload. Content will appear here."></textarea>
               </div>
-              <div>
-                <label class="field-label" for="speakerSelect">Current Speaker</label>
-                <select id="speakerSelect"></select>
+
+              <!-- Audio & Upload Controls -->
+              <div class="space-y-4">
+                <div class="glass-card p-4">
+                  <h4 class="font-bold text-sm mb-2"><span
+                      class="material-symbols-outlined text-primary align-middle text-lg mr-1">mic</span> Audio Capture
+                  </h4>
+                  <div class="flex gap-2 mb-3">
+                    <button id="audioStartBtn" type="button" class="btn-secondary flex-1">Start Recording</button>
+                    <button id="audioStopBtn" type="button" class="btn-secondary flex-1" disabled>Stop</button>
+                  </div>
+                  <p class="text-xs text-slate-500">Status: <span id="audioStatus">Idle</span></p>
+                </div>
+
+                <div class="glass-card p-4">
+                  <h4 class="font-bold text-sm mb-2"><span
+                      class="material-symbols-outlined text-primary align-middle text-lg mr-1">upload_file</span>
+                    Document Analysis</h4>
+                  <input id="minutesPdfUnified" type="file" accept=".pdf" class="text-sm mb-2">
+                  <button id="uploadPdfUnifiedBtn" type="button" class="btn-secondary w-full">Extract Document</button>
+                </div>
               </div>
             </div>
 
-            <div class="button-row mt-4">
-              <button id="addSpeakerBtn" type="button" class="btn-secondary">Add Speaker</button>
-              <button id="audioStartBtn" type="button" class="btn-secondary">Start Audio</button>
-              <button id="audioStopBtn" type="button" class="btn-secondary" disabled>Stop Audio</button>
-              <button id="analyzeMeetingBtn" type="button" class="btn-primary">Analyze Full Meeting</button>
+            <div class="mt-6 flex justify-end">
+              <button id="processInputBtn" type="button" class="btn-primary px-8 py-3 shadow-lg">Process
+                Requirements</button>
             </div>
-
-            <p class="mt-4"><strong>Audio Status:</strong> <span id="audioStatus" aria-live="polite">Idle</span></p>
-            <p><strong>Detected Speaker:</strong> <span id="detectedSpeaker" aria-live="polite">None</span></p>
-            <pre id="transcriptPreview" class="list-box max-h-40 overflow-y-auto whitespace-pre-wrap">No transcript yet.</pre>
-
-            <h4 class="sub-title">Captured Speaker Segments</h4>
-            <ul id="speakerSegments" class="list-box"></ul>
           </section>
         </div>
 
-        <section id="result" class="workspace-card result hidden mt-6">
-          <h3 class="panel-title">Analysis Result</h3>
-          <p><strong>Status:</strong> <span id="status" aria-live="polite"></span></p>
-          <p id="message"></p>
+        <div id="wizardSteps" class="mt-8 space-y-6 hidden">
 
-          <h4 class="sub-title">Detected Domains</h4>
-          <ul id="domains" class="list-box" aria-live="polite"></ul>
-
-          <h4 class="sub-title">Extracted Requirements</h4>
-          <ul id="extractedRequirements" class="list-box" aria-live="polite"></ul>
-
-          <h4 class="sub-title">Open Questions</h4>
-          <ul id="openQuestions" class="list-box" aria-live="polite"></ul>
-
-          <h4 class="sub-title">Resolved Questions</h4>
-          <ul id="resolvedQuestions" class="list-box" aria-live="polite"></ul>
-
-          <h4 class="sub-title">Clarification Questions</h4>
-          <ul id="questions" class="list-box" aria-live="polite"></ul>
-
-          <h4 class="sub-title">Per-Requirement Analysis</h4>
-          <div id="itemAnalyses" class="cards"></div>
-
-          <h4 class="sub-title text-slate-400">NLP Capability Insights</h4>
-          <div class="space-y-4 mb-6">
-            <div>
-              <div class="flex justify-between mb-1">
-                <span class="text-sm font-medium">Complexity Score</span>
-                <span id="complexityScore" class="text-sm font-medium">0</span>
+          <section id="step2_Questions" class="workspace-card result">
+            <h3 class="panel-title">Step 2: Ambiguity Detection & Questions</h3>
+            <p class="text-sm text-slate-500 mb-4">Please provide clarification on the following generated questions.
+            </p>
+            <div class="grid gap-6 md:grid-cols-2 mb-6">
+              <div>
+                <h4
+                  class="font-bold text-slate-700 dark:text-slate-300 mb-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                  Technical Questions</h4>
+                <ul id="techQuestions" class="space-y-2 text-sm"></ul>
               </div>
-              <div class="w-full bg-slate-200 rounded-full h-2 dark:bg-slate-700">
-                <div id="complexityBar" class="bg-primary h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+              <div>
+                <h4
+                  class="font-bold text-slate-700 dark:text-slate-300 mb-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                  Non-Technical Questions</h4>
+                <ul id="nonTechQuestions" class="space-y-2 text-sm"></ul>
               </div>
             </div>
-            <div>
-              <div class="flex justify-between mb-1">
-                <span class="text-sm font-medium">Decision Readiness Score</span>
-                <span id="decisionReadinessScore" class="text-sm font-medium">0</span>
+
+            <div class="mt-4 border-t border-slate-200 dark:border-slate-800 pt-4">
+              <label class="field-label" for="answersInput">Provide Answers Here</label>
+              <textarea id="answersInput" rows="4"
+                placeholder="Type answers to the above questions to lock requirements..."></textarea>
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+              <h4 class="sub-title">Suggested Tech Stack Options</h4>
+              <p class="text-xs text-slate-500 mb-2">Based on current requirements (Phase 4).</p>
+              <ul id="toolSuggestions" class="grid gap-3 sm:grid-cols-2"></ul>
+            </div>
+            <div class="mt-4 flex justify-end">
+              <button id="submitAnswersBtn" type="button" class="btn-primary">Submit Answers & Finalize</button>
+            </div>
+          </section>
+
+          <section id="step3_Finalize" class="workspace-card result hidden">
+            <h3 class="panel-title">Step 3: Finalize Requirements</h3>
+            <div class="grid gap-6">
+              <div>
+                <h4 class="sub-title">Requirements Pipeline</h4>
+                <div id="itemAnalyses" class="cards"></div>
               </div>
-              <div class="w-full bg-slate-200 rounded-full h-2 dark:bg-slate-700">
-                <div id="decisionReadinessBar" class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <div class="mt-6 flex justify-end">
+              <button id="lockTechStackBtn" type="button" class="btn-primary">Lock Requirements & Tech Stack</button>
+            </div>
+          </section>
+
+          <section id="step4_Insights" class="workspace-card result hidden">
+            <h3 class="panel-title">Step 4: Insight Highlights For Review</h3>
+            <div class="glass-card p-6 italic text-slate-600 dark:text-slate-400 mb-4" id="summary"></div>
+            <div class="grid gap-4 md:grid-cols-2 text-sm">
+              <div>
+                <h5 class="font-bold mb-2">Service Improvements</h5>
+                <ul id="serviceImprovements" class="list-disc pl-4 space-y-1"></ul>
+              </div>
+              <div>
+                <h5 class="font-bold mb-2">Business Opportunities</h5>
+                <ul id="businessOpportunities" class="list-disc pl-4 space-y-1"></ul>
               </div>
             </div>
-          </div>
-
-          <h5 class="sub-title">Top Concepts</h5>
-          <ul id="topConcepts" class="list-box"></ul>
-
-          <h5 class="sub-title">Investigation Actions</h5>
-          <ul id="investigationActions" class="list-box"></ul>
-
-          <h5 class="sub-title">Service Improvement Opportunities</h5>
-          <ul id="serviceImprovements" class="list-box"></ul>
-
-          <h5 class="sub-title">Business Opportunities</h5>
-          <ul id="businessOpportunities" class="list-box"></ul>
-
-          <h5 class="sub-title">Stakeholder Communication Plan</h5>
-          <ul id="stakeholderComms" class="list-box"></ul>
-
-          <div id="sprintSection" class="mt-8 border-t border-slate-200/10 pt-8">
-            <div class="flex items-center gap-2 mb-6">
-              <span class="material-symbols-outlined text-primary">dynamic_feed</span>
-              <h4 class="text-xl font-bold">Sprint Roadmap</h4>
+            <div class="mt-6 flex justify-end gap-3">
+              <button id="disproveInsightsBtn" type="button"
+                class="btn-secondary text-red-500 border-red-500">Disapproved</button>
+              <button id="approveInsightsBtn" type="button"
+                class="btn-primary bg-green-600 hover:bg-green-700">Approved</button>
             </div>
-            <div id="sprintPlan" class="grid gap-6 md:grid-cols-3">
-              <!-- Sprint cards go here -->
-            </div>
-          </div>
+          </section>
 
-          <div id="toolingSection" class="mt-8 border-t border-slate-200/10 pt-8">
-            <div class="flex items-center justify-between mb-6">
-              <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">token</span>
-                <h4 class="text-xl font-bold">Strategic Tooling</h4>
-              </div>
-              <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Proprietary Only</span>
+          <section id="step5_Sprints" class="workspace-card result hidden">
+            <h3 class="panel-title">Step 5: Sprint Planning</h3>
+            <div id="sprintPlan" class="grid gap-6 md:grid-cols-3 mb-6"></div>
+            <div class="flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800 pt-4">
+              <button id="notFeasibleBtn" type="button" class="btn-secondary text-orange-500 border-orange-500">Not
+                Feasible</button>
+              <button id="feasibleBtn" type="button" class="btn-primary">Feasible & Launch</button>
             </div>
-            <ul id="toolSuggestions" class="grid gap-3 sm:grid-cols-2"></ul>
-          </div>
-
-          <div class="mt-8 border-t border-slate-200/10 pt-8">
-            <h4 class="sub-title">LLM Executive Summary</h4>
-            <div class="glass-card p-6 italic text-slate-400" id="summary"></div>
-          </div>
-        </section>
+          </section>
+        </div>
 
         <section class="workspace-card mt-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="panel-title mb-0">Meeting History</h3>
             <button id="viewRevisionsBtn" class="btn-secondary text-xs py-1 hidden">View Revised Insights</button>
           </div>
-          <div id="meetingHistory" class="history"><p>No meeting selected.</p></div>
+          <div id="meetingHistory" class="history">
+            <p>No meeting selected.</p>
+          </div>
         </section>
 
         <p id="error" class="error hidden"></p>
@@ -412,4 +430,5 @@
     }
   </script>
 </body>
+
 </html>

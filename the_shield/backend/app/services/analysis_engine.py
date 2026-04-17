@@ -36,6 +36,24 @@ def run_requirement_analysis(
             requirement_text=requirement,
             domains=detected_domains_item,
         )
+        # Simple rule-based classification and moscow priority
+        classification_val = "Functional"
+        if any(kw in requirement.lower() for kw in ["Must operate", "Secure", "Performance", "compliance", "uptime", "latency"]):
+            classification_val = "Non-functional"
+        elif any(kw in requirement.lower() for kw in ["constraint", "limited to", "must use"]):
+            classification_val = "Constraint"
+        elif any(kw in requirement.lower() for kw in ["rule", "policy", "business"]):
+            classification_val = "Business rules"
+
+        moscow_val = "Could Have"
+        req_lower = requirement.lower()
+        if "must" in req_lower or "critical" in req_lower or "mandatory" in req_lower:
+            moscow_val = "Must Have"
+        elif "should" in req_lower or "expected" in req_lower or "highly recommended" in req_lower:
+            moscow_val = "Should Have"
+        elif "won't" in req_lower or "will not" in req_lower or "out of scope" in req_lower:
+            moscow_val = "Won't Have"
+
         item_analyses.append(
             RequirementItemAnalysis(
                 requirement=requirement,
@@ -45,6 +63,8 @@ def run_requirement_analysis(
                 missing_fields=completeness_item["missing_fields"],
                 domain_gaps=completeness_item["domain_gaps"],
                 questions=questions_item,
+                classification=classification_val,
+                moscow_priority=moscow_val,
             )
         )
 

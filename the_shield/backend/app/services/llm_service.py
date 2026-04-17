@@ -90,7 +90,7 @@ class LLMService:
             self.local_loader.initialize()
             instruction = (
                 "Analyze the requirement and provide insights in JSON format.\n"
-                "In 'proprietary_tool_suggestions', list 3-5 objects with 'name' and 'category' (strictly proprietary/commercial, NO open-source).\n"
+                "In 'proprietary_tool_suggestions', list 3-5 objects with 'name' and 'category' (suggest modern, globally-scaled tech stacks, frameworks, and tools like Next.js, AWS, Azure, PostgreSQL).\n"
                 "In 'sprint_plan', provide a list of 3 sprint objects. Each sprint must have: "
                 "'number' (int), 'goal' (string), 'timeline' (e.g. '2 Weeks'), and 'tasks' (list of objects).\n"
                 "Each task must have 'task' (string), 'story_points' (1-8), and 'status'='todo'.\n"

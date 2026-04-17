@@ -24,3 +24,19 @@ class SpeakerSegment(BaseModel):
 class MeetingAnalyzeRequest(BaseModel):
     text: Optional[str] = Field(default="", max_length=20000)
     speaker_segments: List[SpeakerSegment] = Field(default_factory=list)
+
+
+class TechStackRequest(BaseModel):
+    scale: str = Field(default="Medium")
+    budget: str = Field(default="Moderate")
+    integrations: List[str] = Field(default_factory=list)
+
+
+class RevisionRequest(BaseModel):
+    accepted_insights: List[str] = Field(default_factory=list)
+    edited_insights: List[str] = Field(default_factory=list)
+
+
+class RebalanceRequest(BaseModel):
+    sprint_velocity: int = Field(default=10)
+    team_members: int = Field(default=3)

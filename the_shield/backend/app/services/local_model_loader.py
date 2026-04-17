@@ -1,10 +1,8 @@
 import os
 from typing import Optional, Any
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import PeftModel
 
 from app.core.settings import get_settings
+
 
 class LocalModelLoader:
     _instance = None
@@ -19,6 +17,10 @@ class LocalModelLoader:
     def initialize(self):
         if self._model is not None:
             return
+
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        from peft import PeftModel
 
         settings = get_settings()
         model_name = settings.ollama_model or "microsoft/Phi-3.5-mini-instruct"
@@ -53,6 +55,8 @@ class LocalModelLoader:
     def generate(self, instruction: str, input_text: str, max_new_tokens: int = 512) -> Optional[str]:
         if not self._model or not self._tokenizer:
             return None
+
+        import torch
 
         prompt = (
             "<|system|>\n"
