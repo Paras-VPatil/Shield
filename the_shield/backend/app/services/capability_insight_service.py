@@ -83,6 +83,38 @@ BUSINESS_OPPORTUNITY_MAP = {
     "integration": "Expose partner APIs and marketplace integrations to unlock ecosystem growth.",
 }
 
+TECH_STACK_BANK = {
+    "security": [
+        {"name": "Okta", "category": "IAM/Auth"},
+        {"name": "SentinelOne", "category": "EDR/Security"},
+        {"name": "Snyk", "category": "DevSecOps"},
+    ],
+    "healthcare": [
+        {"name": "Epic Systems", "category": "EHR Integration"},
+        {"name": "Vanta", "category": "Compliance/HIPAA"},
+        {"name": "Drata", "category": "Compliance"},
+    ],
+    "analytics": [
+        {"name": "Snowflake", "category": "Data Warehouse"},
+        {"name": "Tableau", "category": "BI/Visualization"},
+        {"name": "Datadog", "category": "Observability"},
+    ],
+    "payment": [
+        {"name": "Stripe", "category": "Payment Gateway"},
+        {"name": "Adyen", "category": "Global Payments"},
+        {"name": "Braintree", "category": "Payment Processing"},
+    ],
+    "booking": [
+        {"name": "Salesforce", "category": "CRM"},
+        {"name": "Twilio", "category": "Communications"},
+    ],
+    "default": [
+        {"name": "AWS/Azure", "category": "Infrastructure"},
+        {"name": "Datadog", "category": "Monitoring"},
+        {"name": "Slack/Teams", "category": "Collaboration"},
+    ],
+}
+
 
 def _tokenize(text: str) -> list[str]:
     tokens = re.findall(r"[A-Za-z0-9][A-Za-z0-9\-]{1,}", text.lower())
@@ -166,6 +198,56 @@ def _stakeholder_communications(item_analyses: list[RequirementItemAnalysis], do
     return unique_in_order(notes)
 
 
+def _generate_rule_based_sprint_plan(domains: list[str]) -> list[dict]:
+    primary_domain = domains[0] if domains else "general"
+    return [
+        {
+            "number": 1,
+            "goal": f"Discovery & {primary_domain.title()} Architecture",
+            "timeline": "2 Weeks",
+            "tasks": [
+                {"task": "Analyze core requirement boundaries", "story_points": 3, "status": "todo"},
+                {"task": f"Define {primary_domain} data models", "story_points": 5, "status": "todo"},
+                {"task": "Initial stakeholder review", "story_points": 2, "status": "todo"},
+            ],
+        },
+        {
+            "number": 2,
+            "goal": "Core Implementation & Integration",
+            "timeline": "3 Weeks",
+            "tasks": [
+                {"task": "Develop primary functional modules", "story_points": 8, "status": "todo"},
+                {"task": "Integrate with suggested tech stack", "story_points": 5, "status": "todo"},
+                {"task": "Unit & Integration testing", "story_points": 3, "status": "todo"},
+            ],
+        },
+        {
+            "number": 3,
+            "goal": "Hardening & Beta Release",
+            "timeline": "2 Weeks",
+            "tasks": [
+                {"task": "Performance & Security audit", "story_points": 4, "status": "todo"},
+                {"task": "User acceptance testing (UAT)", "story_points": 3, "status": "todo"},
+                {"task": "Production environment setup", "story_points": 2, "status": "todo"},
+            ],
+        },
+    ]
+
+
+def _generate_rule_based_tech_stack(domains: list[str]) -> list[dict]:
+    suggestions = []
+    seen = set()
+    for domain in domains:
+        if domain in TECH_STACK_BANK:
+            for tool in TECH_STACK_BANK[domain]:
+                if tool["name"] not in seen:
+                    suggestions.append(tool)
+                    seen.add(tool["name"])
+    if not suggestions:
+        suggestions = TECH_STACK_BANK["default"]
+    return suggestions[:5]
+
+
 def build_capability_insights(
     text: str,
     item_analyses: list[RequirementItemAnalysis],
@@ -199,6 +281,6 @@ def build_capability_insights(
             "Trend chart of open vs resolved clarification questions per meeting iteration.",
             "Domain-wise risk radar linking detected gaps to service and business impact.",
         ],
-        "sprint_plan": [],
-        "proprietary_tool_suggestions": [],
+        "sprint_plan": _generate_rule_based_sprint_plan(domains),
+        "proprietary_tool_suggestions": _generate_rule_based_tech_stack(domains),
     }

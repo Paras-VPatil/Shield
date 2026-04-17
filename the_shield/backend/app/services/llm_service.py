@@ -1,6 +1,10 @@
-from typing import Optional
-
+import json
+import re
 import httpx
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 
 from app.core.settings import get_settings
 from app.services.local_model_loader import get_local_model_loader
@@ -80,35 +84,79 @@ class LLMService:
 
     def extract_capability_insights(self, text: str) -> Optional[dict]:
         """
-        Calls the local LLM to extract structured capability insights.
+        Calls the appropriate LLM provider to extract structured capability insights.
         """
         mode = self.settings.llm_mode.strip().lower()
-        if mode != "local":
+        instruction = (
+            "Analyze the requirement and provide insights in JSON format.\n"
+            "In 'proprietary_tool_suggestions', list 3-5 objects with 'name' and 'category' (strictly proprietary/commercial, NO open-source).\n"
+            "In 'sprint_plan', provide a list of 3 sprint objects. Each sprint must have: "
+            "'number' (int), 'goal' (string), 'timeline' (e.g. '2 Weeks'), and 'tasks' (list of objects).\n"
+            "Each task must have 'task' (string), 'story_points' (1-8), and 'status'='todo'.\n"
+            "Also include 'complexity_score' (0-100), 'decision_readiness_score' (0-100), 'top_concepts', 'investigation_actions', 'service_improvements', 'business_opportunities', 'stakeholder_communications', and 'visualization_recommendations'."
+        )
+
+        raw_response = None
+        if mode == "local":
+            raw_response = self._extract_with_local(text, instruction)
+        elif mode == "ollama":
+            raw_response = self._extract_with_ollama(text, instruction)
+        elif mode == "gemini":
+            raw_response = self._extract_with_gemini(text, instruction)
+
+        if not raw_response:
             return None
 
+        return self._parse_json_response(raw_response)
+
+    def _extract_with_local(self, text: str, instruction: str) -> Optional[str]:
         try:
             self.local_loader.initialize()
-            instruction = (
-                "Analyze the requirement and provide insights in JSON format.\n"
-                "In 'proprietary_tool_suggestions', list 3-5 objects with 'name' and 'category' (strictly proprietary/commercial, NO open-source).\n"
-                "In 'sprint_plan', provide a list of 3 sprint objects. Each sprint must have: "
-                "'number' (int), 'goal' (string), 'timeline' (e.g. '2 Weeks'), and 'tasks' (list of objects).\n"
-                "Each task must have 'task' (string), 'story_points' (1-8), and 'status'='todo'.\n"
-                "Also include 'complexity_score' (0-100), 'decision_readiness_score' (0-100), 'top_concepts', 'investigation_actions', 'service_improvements', 'business_opportunities', 'stakeholder_communications', and 'visualization_recommendations'."
-            )
-            print(f"DEBUG: Generating LLM response for text length {len(text)}...")
-            response = self.local_loader.generate(
+            return self.local_loader.generate(
                 instruction=instruction,
                 input_text=text,
                 max_new_tokens=1024
             )
-            print(f"DEBUG: Raw LLM Response: {response[:200]}...")
-            if not response:
+        except Exception:
+            return None
+
+    def _extract_with_ollama(self, text: str, instruction: str) -> Optional[str]:
+        prompt = f"Instruction: {instruction}\n\nRequirement Text: {text}\n\nJSON output:"
+        payload = {
+            "model": self.settings.ollama_model,
+            "prompt": prompt,
+            "stream": False,
+            "format": "json"
+        }
+        try:
+            with httpx.Client(timeout=30.0) as client:
+                response = client.post(
+                    f"{self.settings.ollama_url.rstrip('/')}/api/generate",
+                    json=payload,
+                )
+            if response.status_code != 200:
                 return None
-            
-            import json
-            import re
-            
+            return response.json().get("response", "").strip()
+        except Exception:
+            return None
+
+    def _extract_with_gemini(self, text: str, instruction: str) -> Optional[str]:
+        if not genai or not self.settings.gemini_api_key:
+            return None
+        try:
+            genai.configure(api_key=self.settings.gemini_api_key)
+            model = genai.GenerativeModel(self.settings.gemini_model)
+            prompt = f"{instruction}\n\nRequirement Content:\n{text}"
+            response = model.generate_content(
+                prompt,
+                generation_config={"response_mime_type": "application/json"}
+            )
+            return response.text
+        except Exception:
+            return None
+
+    def _parse_json_response(self, response: str) -> Optional[dict]:
+        try:
             # Extract JSON from markdown code blocks or raw text
             json_pattern = r'```(?:json)?\s*(\{.*?\})\s*```'
             json_match = re.search(json_pattern, response, re.DOTALL)
@@ -117,41 +165,35 @@ class LLMService:
                 # Fallback to searching for the first { and last }
                 json_match = re.search(r'(\{.*\})', response, re.DOTALL)
             
-            if json_match:
-                try:
-                    data = json.loads(json_match.group(1))
-                    
-                    # Coerce for Pydantic stability
-                    if 'sprint_plan' not in data or not isinstance(data['sprint_plan'], list):
-                        data['sprint_plan'] = []
-                    else:
-                        # Ensure each sprint has required fields
-                        for s in data['sprint_plan']:
-                            if not isinstance(s, dict): continue
-                            if 'number' not in s: s['number'] = 1
-                            if 'goal' not in s: s['goal'] = "Sprint Goal"
-                            if 'timeline' not in s: s['timeline'] = "2 Weeks"
-                            if 'tasks' not in s: s['tasks'] = []
-                    
-                    if 'proprietary_tool_suggestions' not in data or not isinstance(data['proprietary_tool_suggestions'], list):
-                        data['proprietary_tool_suggestions'] = []
-                    else:
-                        # Coerce strings to objects if needed
-                        normalized_tools = []
-                        for t in data['proprietary_tool_suggestions']:
-                            if isinstance(t, str):
-                                normalized_tools.append({"name": t, "category": "Platform"})
-                            elif isinstance(t, dict):
-                                if 'name' not in t: t['name'] = "Unknown Tool"
-                                if 'category' not in t: t['category'] = "Professional Tool"
-                                normalized_tools.append(t)
-                        data['proprietary_tool_suggestions'] = normalized_tools
+            json_str = json_match.group(1) if json_match else response
+            data = json.loads(json_str)
+            
+            # Coerce for Pydantic stability
+            if 'sprint_plan' not in data or not isinstance(data['sprint_plan'], list):
+                data['sprint_plan'] = []
+            else:
+                for s in data['sprint_plan']:
+                    if not isinstance(s, dict): continue
+                    if 'number' not in s: s['number'] = 1
+                    if 'goal' not in s: s['goal'] = "Sprint Goal"
+                    if 'timeline' not in s: s['timeline'] = "2 Weeks"
+                    if 'tasks' not in s: s['tasks'] = []
+            
+            if 'proprietary_tool_suggestions' not in data or not isinstance(data['proprietary_tool_suggestions'], list):
+                data['proprietary_tool_suggestions'] = []
+            else:
+                normalized_tools = []
+                for t in data['proprietary_tool_suggestions']:
+                    if isinstance(t, str):
+                        normalized_tools.append({"name": t, "category": "Platform"})
+                    elif isinstance(t, dict):
+                        if 'name' not in t: t['name'] = "Unknown Tool"
+                        if 'category' not in t: t['category'] = "Professional Tool"
+                        normalized_tools.append(t)
+                data['proprietary_tool_suggestions'] = normalized_tools
 
-                    return data
-                except json.JSONDecodeError:
-                    return None
-            return None
-        except Exception:
+            return data
+        except (json.JSONDecodeError, Exception):
             return None
 
     @staticmethod
