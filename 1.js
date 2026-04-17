@@ -453,12 +453,12 @@ document.addEventListener("DOMContentLoaded", () => {
                   <h4 class="font-bold mb-2 text-primary">Generated Insights (Phase 5)</h4>
                   <div class="space-y-4">
                       <div class="glass-card p-4">
-                           <label class="font-bold text-sm mb-1 block">Investigation Actions</label>
-                          <textarea id="revIa" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${iA.join("\n")}</textarea>
+                          <label class="font-bold text-sm mb-1 block">Investigation Actions</label>
+                          <textarea id="revIa" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${iA.join("\\n")}</textarea>
                       </div>
                       <div class="glass-card p-4">
                           <label class="font-bold text-sm mb-1 block">Service Improvements</label>
-                          <textarea id="revSi" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${sI.join("\n")}</textarea>
+                          <textarea id="revSi" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${sI.join("\\n")}</textarea>
                       </div>
                   </div>
                   <div class="flex justify-end gap-3 mt-4">

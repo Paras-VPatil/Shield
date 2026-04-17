@@ -1,8 +1,14 @@
 import os
 from typing import Optional, Any
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import PeftModel
+# Optional ML dependencies for local execution
+_HAS_TORCH = False
+try:
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from peft import PeftModel
+    _HAS_TORCH = True
+except ImportError:
+    pass
 
 from app.core.settings import get_settings
 
@@ -17,6 +23,10 @@ class LocalModelLoader:
         return cls._instance
 
     def initialize(self):
+        if not _HAS_TORCH:
+            print("Warning: Local ML dependencies (torch, transformers, peft) are not installed. Local mode will not work.")
+            return
+
         if self._model is not None:
             return
 
@@ -51,7 +61,7 @@ class LocalModelLoader:
             self._tokenizer = None
 
     def generate(self, instruction: str, input_text: str, max_new_tokens: int = 512) -> Optional[str]:
-        if not self._model or not self._tokenizer:
+        if not _HAS_TORCH or not self._model or not self._tokenizer:
             return None
 
         prompt = (
