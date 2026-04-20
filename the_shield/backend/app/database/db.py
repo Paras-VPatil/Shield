@@ -4,16 +4,20 @@ import threading
 from pathlib import Path
 from typing import Any
 
+from app.core.settings import get_settings
+
 try:
     from pymongo import MongoClient
 except ImportError:  # pragma: no cover - optional for json mode
     MongoClient = None  # type: ignore[assignment]
 
+settings = get_settings()
+
 DB_LOCK = threading.Lock()
 DB_PATH = Path(os.getenv("SHIELD_DB_PATH", Path(__file__).resolve().parent / "shield_store.json"))
-DB_MODE = os.getenv("SHIELD_DB_MODE", "json").strip().lower()
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://127.0.0.1:27017")
-MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "the_shield")
+DB_MODE = settings.shield_db_mode.strip().lower()
+MONGODB_URI = settings.mongodb_uri
+MONGODB_DB_NAME = settings.mongodb_db_name
 DEFAULT_DATA = {
     "users": [],
     "sessions": [],

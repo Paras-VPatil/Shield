@@ -13,9 +13,18 @@ app = FastAPI(title=settings.app_name, version=settings.app_version)
 
 # Mount frontend static files
 import os
-frontend_path = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend"))
-if os.path.exists(frontend_path):
-    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+is_vercel = os.environ.get("VERCEL") == "1"
+
+if not is_vercel:
+    # local path resolution: root of the project where 'public' folder resides
+    # We are in the_shield/backend/app/main.py, so we go up 3 levels to reach root
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    public_path = os.path.abspath(os.path.join(base_dir, "public"))
+    
+    if os.path.exists(public_path):
+        app.mount("/static", StaticFiles(directory=public_path), name="static")
+        # Mount public at root (must be after routers)
+        app.mount("/", StaticFiles(directory=public_path, html=True), name="static")
 
 origins = [origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()]
 if not origins:
@@ -29,17 +38,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(analyze_router)
-app.include_router(auth_router)
-app.include_router(meetings_router)
+# Use '/api' prefix on Vercel to match rewrites and frontend build
+api_prefix = "/api" if is_vercel else ""
+app.include_router(analyze_router, prefix=api_prefix)
+app.include_router(auth_router, prefix=api_prefix)
+app.include_router(meetings_router, prefix=api_prefix)
 
 @app.get("/health")
 async def health_check() -> dict[str, str]:
     return {"status": "ok"}
-
-# Mount frontend at root (must be after routers)
-if os.path.exists(frontend_path):
-    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 
 
 @app.get("/favicon.ico", include_in_schema=False)

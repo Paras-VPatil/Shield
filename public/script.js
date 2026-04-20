@@ -65,7 +65,15 @@ function toggle(id, isHidden) {
 }
 
 function getBaseUrl() {
-  return val("apiBase") || "http://127.0.0.1:8000";
+  const custom = val("apiBase");
+  // If user provided a custom URL other than the default local one, use it
+  if (custom && custom !== "http://127.0.0.1:8000") return custom;
+  
+  // Detection for production environment (Vercel)
+  if (window.location.hostname !== "127.0.0.1" && window.location.hostname !== "localhost") {
+      return "/api";
+  }
+  return custom || "http://127.0.0.1:8000";
 }
 
 function authHeaders(includeJson = true) {
