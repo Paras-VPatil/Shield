@@ -202,34 +202,17 @@ function scheduleLiveAnalysis() {
 let lastAnalyzedData = null;
 
 function renderAnalysis(data) {
-  lastAnalyzedData = data;
+  toggle("result", false);
+  text("status", data.status || "unknown");
+  text("message", data.message || "");
+  text("summary", data.llm_summary || "");
+  listInto("domains", data.domains || []);
+  listInto("extractedRequirements", data.extracted_requirements || []);
+  listInto("questions", data.questions || []);
+  listInto("openQuestions", data.open_questions || []);
+  listInto("resolvedQuestions", data.resolved_questions || []);
 
-  // Enter Step 2
-  toggle("step1_Input", true);
-  toggle("wizardSteps", false);
-  toggle("step2_Questions", false);
-  toggle("step3_Finalize", true);
-  toggle("step4_Insights", true);
-  toggle("step5_Sprints", true);
-
-  // Populate Step 2: Questions
-  const tQ = $("techQuestions");
-  const nTQ = $("nonTechQuestions");
-  if (tQ) tQ.innerHTML = "";
-  if (nTQ) nTQ.innerHTML = "";
-
-  (data.questions || []).forEach(q => {
-    const li = document.createElement("li");
-    li.className = "p-2 bg-white/50 dark:bg-slate-900/50 rounded border border-slate-100 dark:border-slate-800";
-    li.textContent = q.text || q; // Handle dict or raw string fallback
-    if (q.is_tech) {
-      if (tQ) tQ.appendChild(li);
-    } else {
-      if (nTQ) nTQ.appendChild(li);
-    }
-  });
-
-  // Populate Step 3: Item Analyses
+  // Item analyses
   const container = $("itemAnalyses");
   if (container) {
     container.innerHTML = "";
@@ -253,9 +236,18 @@ function renderAnalysis(data) {
 
   // Capability insights
   const cap = data.capability_insights || {};
-  window._latestCapInsights = cap;
+  text("complexityScore", String(cap.complexity_score ?? 0));
+  text("decisionReadinessScore", String(cap.decision_readiness_score ?? 0));
+  const cBar = $("complexityBar"); if (cBar) cBar.style.width = `${cap.complexity_score}%`;
+  const drBar = $("decisionReadinessBar"); if (drBar) drBar.style.width = `${cap.decision_readiness_score}%`;
 
-  // Populate Step 3: Tools
+  listInto("topConcepts", cap.top_concepts || []);
+  listInto("investigationActions", cap.investigation_actions || []);
+  listInto("serviceImprovements", cap.service_improvements || []);
+  listInto("businessOpportunities", cap.business_opportunities || []);
+  listInto("stakeholderComms", cap.stakeholder_communications || []);
+
+  // Tools
   const toolEl = $("toolSuggestions");
   if (toolEl) {
     toolEl.innerHTML = "";
@@ -273,12 +265,7 @@ function renderAnalysis(data) {
     });
   }
 
-  // Populate Step 4: Insights
-  text("summary", data.llm_summary || "");
-  listInto("serviceImprovements", cap.service_improvements || []);
-  listInto("businessOpportunities", cap.business_opportunities || []);
-
-  // Populate Step 5: Sprints
+  // Sprints
   const sprintEl = $("sprintPlan");
   if (sprintEl) {
     sprintEl.innerHTML = "";
@@ -290,56 +277,12 @@ function renderAnalysis(data) {
           <span class="text-xs font-black text-primary uppercase">Sprint ${sprint.number || idx + 1}</span>
           <span class="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 rounded">${sprint.timeline || "2W"}</span>
         </div>
-        <h4 class="text-sm font-bold mb-1">${sprint.goal || sprint.focus || "Sprint Goal"}</h4>
-        <ul class="text-xs space-y-2 mt-3">
-          ${(sprint.tasks || []).map(t => {
-        const text = typeof t === 'string' ? t : t.task;
-        const sp = t.story_points ? `<span class="bg-primary/20 text-primary px-1 rounded ml-1">${t.story_points} SP</span>` : '';
-        return `
-                  <li class="bg-white/50 dark:bg-slate-900/50 p-2 rounded border border-slate-100 dark:border-slate-800">
-                      <div class="font-medium">${text} ${sp}</div>
-                  </li>
-              `;
-      }).join("")}
+        <h4 class="text-sm font-bold mb-1">${sprint.goal || sprint.focus}</h4>
+        <ul class="text-xs space-y-1">
+          ${(sprint.tasks || []).map(t => `<li>\u2022 ${typeof t === 'string' ? t : t.task}</li>`).join("")}
         </ul>
       `;
-      sprintEl.appendChild(card);
-    });
-  }
-
-  // Phase 8: Version Control & Rollbacks
-  const histEl = $("meetingHistory");
-  if (histEl) {
-    if (histEl.innerHTML.includes("No meeting selected.")) {
-      histEl.innerHTML = "";
-    }
-    const snapshotId = "v" + Date.now();
-    const histItem = document.createElement("div");
-    histItem.className = "p-3 border-b border-slate-100 dark:border-slate-800 last:border-0";
-    const displayTime = new Date().toLocaleTimeString();
-    histItem.innerHTML = `
-          <div class="flex justify-between items-start mb-1">
-              <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Analysis Snapshot ${snapshotId}</span>
-              <span class="text-[10px] bg-emerald-100 text-emerald-700 px-1 rounded dark:bg-emerald-900/30 dark:text-emerald-400">Current</span>
-          </div>
-          <div class="text-xs text-slate-500 mb-2">${displayTime} - Status: ${data.status}</div>
-          <div class="flex gap-2">
-              <button type="button" class="btn-secondary text-[10px] py-1 rollback-btn" data-id="${snapshotId}">Rollback to ${snapshotId}</button>
-          </div>
-      `;
-    histEl.prepend(histItem);
-
-    // Remove "Current" tags from older ones
-    const oldTags = histEl.querySelectorAll('.bg-emerald-100');
-    oldTags.forEach((tag, idx) => {
-      if (idx > 0) tag.classList.add("hidden");
-    });
-
-    // Bind rollback buttons
-    histEl.querySelectorAll('.rollback-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        alert("Rolled back requirement analysis to " + e.target.getAttribute("data-id") + " successfully.");
-      });
+      sprintEl.appendChild(sprintEl.appendChild(card));
     });
   }
 }
@@ -347,26 +290,16 @@ function renderAnalysis(data) {
 async function analyzeStandalone() {
   console.log("Analyze Standalone Triggered");
   const textVal = val("requirementText");
-  if (!textVal) {
-    alert("Please enter requirement notes or record audio first.");
-    return;
-  }
+  if (!textVal) throw new Error("Enter requirement text.");
   setError("");
-  const processBtn = $("processInputBtn");
-  if (processBtn) processBtn.textContent = "Processing...";
-
-  try {
-    const res = await fetch(`${getBaseUrl()}/analyze`, {
-      method: "POST",
-      headers: authHeaders(),
-      body: JSON.stringify({ text: textVal }),
-    });
-    if (!res.ok) throw new Error(`Analysis failed (${res.status})`);
-    const data = await res.json();
-    renderAnalysis(data);
-  } finally {
-    if (processBtn) processBtn.textContent = "Process Requirements";
-  }
+  const res = await fetch(`${getBaseUrl()}/analyze`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({ text: textVal }),
+  });
+  if (!res.ok) throw new Error(`Analysis failed (${res.status})`);
+  const data = await res.json();
+  renderAnalysis(data);
 }
 
 // DOM Ready
@@ -396,47 +329,58 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle("appView", false);
   });
 
-  wire("processInputBtn", "click", analyzeStandalone);
+  wire("analyzeBtn", "click", analyzeStandalone);
 
-  // Wizard state machine progression
-  wire("submitAnswersBtn", "click", () => {
-    toggle("step2_Questions", true); // hide
-    toggle("step3_Finalize", false); // show
-  });
-
-  wire("lockTechStackBtn", "click", () => {
-    toggle("step3_Finalize", true);
-    toggle("step4_Insights", false);
-  });
-
-  wire("approveInsightsBtn", "click", () => {
-    toggle("step4_Insights", true);
-    toggle("step5_Sprints", false);
-  });
-
-  wire("disproveInsightsBtn", "click", () => {
-    alert("Insights disapproved! Returning to initial setup.");
-    toggle("step4_Insights", true);
-    toggle("wizardSteps", true);
-    toggle("step1_Input", false);
-  });
-
-  wire("feasibleBtn", "click", () => {
-    alert("Sprints validated as Feasible! Project planning saved.");
-    toggle("step5_Sprints", true);
-    toggle("wizardSteps", true);
-    toggle("step1_Input", false);
-    $("requirementText").value = "";
-  });
-
-  wire("notFeasibleBtn", "click", () => {
-    alert("Sprint load not feasible. We will generate an alternate plan (Simulated).");
-  });
   const reqInput = $("requirementText");
   if (reqInput) {
     reqInput.addEventListener("input", () => {
       renderLiveRequirements();
       scheduleLiveAnalysis();
+    });
+  }
+
+  // Phase 5 Revisions UI
+  const revBtn = $("viewRevisionsBtn");
+  if (revBtn) {
+    revBtn.addEventListener("click", () => {
+      const revC = $("revisionsContent");
+      if (revC) {
+        const capMap = window._latestCapInsights || {};
+        const iA = capMap.investigation_actions || ["No current investigation actions."];
+        const sI = capMap.service_improvements || ["No service improvements."];
+        revC.innerHTML = `
+                  <h4 class="font-bold mb-2 text-primary">Generated Insights (Phase 5)</h4>
+                  <div class="space-y-4">
+                      <div class="glass-card p-4">
+                          <label class="font-bold text-sm mb-1 block">Investigation Actions</label>
+                          <textarea id="revIa" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${iA.join("\\n")}</textarea>
+                      </div>
+                      <div class="glass-card p-4">
+                          <label class="font-bold text-sm mb-1 block">Service Improvements</label>
+                          <textarea id="revSi" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${sI.join("\\n")}</textarea>
+                      </div>
+                  </div>
+                  <div class="flex justify-end gap-3 mt-4">
+                      <button id="approveInsightsBtn" type="button" class="btn-primary text-xs py-2 px-4 shadow-xl">Approve & Save Insights</button>
+                  </div>
+              `;
+
+        const approveBtn = $("approveInsightsBtn");
+        if (approveBtn) {
+          approveBtn.addEventListener("click", () => {
+            alert("Insights approved and saved successfully!");
+            $("revisionsModal").classList.add("hidden");
+          });
+        }
+      }
+      $("revisionsModal")?.classList.remove("hidden");
+    });
+  }
+
+  const closeRev = $("closeRevisionsBtn");
+  if (closeRev) {
+    closeRev.addEventListener("click", () => {
+      $("revisionsModal")?.classList.add("hidden");
     });
   }
 

@@ -209,39 +209,63 @@ def generate_questions(
     domain_gaps: list[str],
     requirement_text: str = "",
     domains: list[str] | None = None,
-    max_questions: int = 15,
-) -> list[str]:
-    questions: list[str] = []
+    max_questions: int = 8,
+) -> list[dict]:
+    questions: list[dict] = []
 
     for field in missing_fields:
         question = MISSING_FIELD_QUESTIONS.get(field)
         if question:
-            questions.append(question)
+            questions.append({"text": question, "is_tech": False})
 
+    tech_keywords = ["oauth", "database", "api", "integration", "session", "timeout", "latency", "tech stack", "framework"]
+    
     for gap in domain_gaps:
         template_question = DOMAIN_GAP_QUESTIONS.get(gap)
+        is_tech = any(tk in gap.lower() for tk in tech_keywords)
         if template_question:
-            questions.append(template_question)
+            questions.append({"text": template_question, "is_tech": is_tech})
             continue
 
         if ":" in gap:
             domain, feature = gap.split(":", maxsplit=1)
-            questions.append(
-                f"For {domain.strip()}, how should the system handle {feature.strip()}?"
-            )
+            is_tech = any(tk in feature.lower() for tk in tech_keywords)
+            questions.append({
+                "text": f"For {domain.strip()}, how should the system handle {feature.strip()}?",
+                "is_tech": is_tech
+            })
         else:
-            questions.append(f"Can you clarify the missing detail: {gap}?")
+            questions.append({"text": f"Can you clarify the missing detail: {gap}?", "is_tech": False})
 
     if requirement_text.strip():
-        questions.extend(_generate_contextual_questions(requirement_text))
+        for q in _generate_contextual_questions(requirement_text):
+            is_tech = any(tk in q.lower() for tk in tech_keywords)
+            questions.append({"text": q, "is_tech": is_tech})
 
     if domains:
-        questions.extend(_generate_domain_questions(domains))
+        for q in _generate_domain_questions(domains):
+            is_tech = any(tk in q.lower() for tk in tech_keywords)
+            questions.append({"text": q, "is_tech": is_tech})
 
-    if (missing_fields or domain_gaps) and len(questions) < 2:
-        questions.append("What are the acceptance criteria for this requirement?")
-        questions.append("Are there edge cases or failure scenarios to include?")
+    has_tech = any(q["is_tech"] for q in questions)
+    if not has_tech:
+        questions.append({
+            "text": "What are the latency, throughput, and scalability expectations for this feature?", 
+            "is_tech": True
+        })
+        questions.append({
+            "text": "What data privacy standards (e.g. at-rest encryption) and database persistence models should this rely on?", 
+            "is_tech": True
+        })
 
-    reasonable = [question for question in questions if _is_reasonable_question(question)]
-    deduped = unique_in_order(reasonable)
+    if (missing_fields or domain_gaps) and len(questions) < 4:
+        questions.append({"text": "What are the acceptance criteria and exact edge cases for this requirement?", "is_tech": False})
+
+    reasonable_dict = {}
+    for q in questions:
+        text = q["text"]
+        if text not in reasonable_dict and _is_reasonable_question(text):
+            reasonable_dict[text] = q
+
+    deduped = list(reasonable_dict.values())
     return deduped[:max_questions]

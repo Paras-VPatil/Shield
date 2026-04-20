@@ -88,32 +88,21 @@ class LLMService:
         Calls the appropriate LLM provider to extract structured capability insights.
         """
         mode = self.settings.llm_mode.strip().lower()
-        instruction = (
-            "Analyze the requirement and provide insights in JSON format.\n"
-            "In 'proprietary_tool_suggestions', list 3-5 objects with 'name' and 'category' (strictly proprietary/commercial, NO open-source).\n"
-            "In 'sprint_plan', provide a list of 3 sprint objects. Each sprint must have: "
-            "'number' (int), 'goal' (string), 'timeline' (e.g. '2 Weeks'), and 'tasks' (list of objects).\n"
-            "Each task must have 'task' (string), 'story_points' (1-8), and 'status'='todo'.\n"
-            "Also include 'complexity_score' (0-100), 'decision_readiness_score' (0-100), 'top_concepts', 'investigation_actions', 'service_improvements', 'business_opportunities', 'stakeholder_communications', and 'visualization_recommendations'."
-        )
-
-        raw_response = None
-        if mode == "local":
-            raw_response = self._extract_with_local(text, instruction)
-        elif mode == "ollama":
-            raw_response = self._extract_with_ollama(text, instruction)
-        elif mode == "gemini":
-            raw_response = self._extract_with_gemini(text, instruction)
-
-        if not raw_response:
+        if mode != "local":
             return None
 
-        return self._parse_json_response(raw_response)
-
-    def _extract_with_local(self, text: str, instruction: str) -> Optional[str]:
         try:
             self.local_loader.initialize()
-            return self.local_loader.generate(
+            instruction = (
+                "Analyze the requirement and provide insights in JSON format.\n"
+                "In 'proprietary_tool_suggestions', list 3-5 objects with 'name' and 'category' (strictly proprietary/commercial, NO open-source).\n"
+                "In 'sprint_plan', provide a list of 3 sprint objects. Each sprint must have: "
+                "'number' (int), 'goal' (string), 'timeline' (e.g. '2 Weeks'), and 'tasks' (list of objects).\n"
+                "Each task must have 'task' (string), 'story_points' (1-8), and 'status'='todo'.\n"
+                "Also include 'complexity_score' (0-100), 'decision_readiness_score' (0-100), 'top_concepts', 'investigation_actions', 'service_improvements', 'business_opportunities', 'stakeholder_communications', and 'visualization_recommendations'."
+            )
+            print(f"DEBUG: Generating LLM response for text length {len(text)}...")
+            response = self.local_loader.generate(
                 instruction=instruction,
                 input_text=text,
                 max_new_tokens=1024

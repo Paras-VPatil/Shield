@@ -42,9 +42,13 @@
     class="sticky top-0 z-50 border-b border-slate-200/20 bg-white/70 backdrop-blur-xl dark:border-slate-800/30 dark:bg-bg-dark/70">
     <div class="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
       <div class="flex items-center gap-4">
-        <a href="/" class="flex items-center gap-3">
-          <img src="FullLogo.jpg" alt="RequiMind AI Logo" class="h-14 w-auto">
-        </a>
+        <div
+          class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/20">
+          <span class="material-symbols-outlined text-2xl">shield_with_heart</span>
+        </div>
+        <span
+          class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400">RequiMind
+          AI</span>
       </div>
       <nav class="hidden items-center gap-8 md:flex">
         <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
@@ -95,7 +99,6 @@
             <div class="flex items-center gap-2">
               <span class="material-symbols-outlined ml-3 text-slate-400">search</span>
               <input
-                id="heroSearchInput"
                 class="w-full border-none bg-transparent px-3 py-2 text-base text-slate-800 placeholder:text-slate-500 focus:ring-0 dark:text-white"
                 placeholder="Describe your next discovery meeting..." type="text" aria-label="Discovery prompt">
               <button id="getStartedBtn" type="button"
@@ -264,27 +267,9 @@
                 <textarea id="requirementText" rows="10"
                   placeholder="Type notes here or use voice/upload. Content will appear here."></textarea>
               </div>
-
-              <!-- Audio & Upload Controls -->
-              <div class="space-y-4">
-                <div class="glass-card p-4">
-                  <h4 class="font-bold text-sm mb-2"><span
-                      class="material-symbols-outlined text-primary align-middle text-lg mr-1">mic</span> Audio Capture
-                  </h4>
-                  <div class="flex gap-2 mb-3">
-                    <button id="audioStartBtn" type="button" class="btn-secondary flex-1">Start Recording</button>
-                    <button id="audioStopBtn" type="button" class="btn-secondary flex-1" disabled>Stop</button>
-                  </div>
-                  <p class="text-xs text-slate-500">Status: <span id="audioStatus">Idle</span></p>
-                </div>
-
-                <div class="glass-card p-4">
-                  <h4 class="font-bold text-sm mb-2"><span
-                      class="material-symbols-outlined text-primary align-middle text-lg mr-1">upload_file</span>
-                    Document Analysis</h4>
-                  <input id="minutesPdfUnified" type="file" accept=".pdf" class="text-sm mb-2 w-full">
-                  <button id="uploadPdfUnifiedBtn" type="button" class="btn-secondary w-full">Extract Document</button>
-                </div>
+              <div>
+                <label class="field-label" for="speakerSelect">Current Speaker</label>
+                <select id="speakerSelect"></select>
               </div>
             </div>
 
@@ -427,7 +412,7 @@
         const getStartedBtn = document.getElementById("getStartedBtn");
         const appView = document.getElementById("appView");
         const landingView = document.getElementById("landingView");
-        
+
         if (appView && landingView) {
           landingView.classList.add("hidden");
           appView.classList.remove("hidden");
