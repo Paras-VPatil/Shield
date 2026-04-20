@@ -2,8 +2,8 @@
 console.log("RequiMind Script Loading...");
 
 // Global state
-let authToken = localStorage.getItem("shield_token") || "";
-let currentUsername = localStorage.getItem("shield_user") || "";
+let authToken = localStorage.getItem("requimind_token") || "";
+let currentUsername = localStorage.getItem("requimind_user") || "";
 let meetings = [];
 let currentSegments = [];
 let recognition = null;
@@ -60,8 +60,20 @@ function html(id, content) {
 function toggle(id, isHidden) {
   const el = $(id);
   if (!el) return;
-  if (isHidden) el.classList.add("hidden");
-  else el.classList.remove("hidden");
+  if (isHidden) {
+    el.classList.add("hidden");
+    el.style.display = "none";
+  } else {
+    el.classList.remove("hidden");
+    // If it's a modal, use grid (from CSS), else use block/flex as appropriate
+    if (el.classList.contains("modal")) {
+      el.style.display = "grid";
+    } else if (el.classList.contains("flex") || el.id === "profileBox") {
+      el.style.display = "flex";
+    } else {
+      el.style.display = "block";
+    }
+  }
 }
 
 function getBaseUrl() {
@@ -94,19 +106,20 @@ function setError(message) {
   err.classList.remove("hidden");
 }
 
-function listInto(id, items) {
+function listInto(id, extracted) {
   const el = $(id);
   if (!el) return;
   el.innerHTML = "";
-  if (!items || !items.length) {
+  if (!extracted || extracted.length === 0) {
     const li = document.createElement("li");
     li.textContent = "None";
     el.appendChild(li);
     return;
   }
-  items.forEach(item => {
+  extracted.forEach(item => {
     const li = document.createElement("li");
-    li.textContent = item;
+    // Handle both string and question object {text, ...}
+    li.textContent = (typeof item === 'object' && item !== null) ? (item.text || JSON.stringify(item)) : item;
     el.appendChild(li);
   });
 }
@@ -229,7 +242,8 @@ function renderAnalysis(data) {
   (data.questions || []).forEach(q => {
     const li = document.createElement("li");
     li.className = "p-2 bg-white/50 dark:bg-slate-900/50 rounded border border-slate-100 dark:border-slate-800";
-    li.textContent = q.text || q; // Handle dict or raw string fallback
+    // Extract .text if it's an object, otherwise use raw value
+    li.textContent = (typeof q === 'object' && q !== null) ? (q.text || JSON.stringify(q)) : q;
     if (q.is_tech) {
       if (tQ) tQ.appendChild(li);
     } else {
@@ -493,8 +507,83 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Authentication UI Handlers
+  function updateAuthUI() {
+    if (authToken && currentUsername) {
+      toggle("openLoginBtn", true);
+      toggle("profileBox", false);
+      text("profileName", currentUsername);
+      if ($("profileAvatar")) $("profileAvatar").textContent = currentUsername.charAt(0).toUpperCase();
+    } else {
+      toggle("openLoginBtn", false);
+      toggle("profileBox", true);
+    }
+  }
+
+  async function login() {
+    const username = val("username");
+    const password = val("password");
+    if (!username || !password) {
+      toggle("loginError", false);
+      text("loginError", "Please enter both fields.");
+      return;
+    }
+
+    try {
+      const resp = await fetch(`${getBaseUrl()}/auth/token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ username, password })
+      });
+      if (!resp.ok) throw new Error("Invalid username or password");
+      const data = await resp.json();
+      authToken = data.access_token;
+      currentUsername = username;
+      localStorage.setItem("requimind_token", authToken);
+      localStorage.setItem("requimind_user", currentUsername);
+      toggle("loginModal", true);
+      updateAuthUI();
+      setError("");
+    } catch (e) {
+      toggle("loginError", false);
+      text("loginError", e.message);
+    }
+  }
+
+  function logout() {
+    authToken = "";
+    currentUsername = "";
+    localStorage.removeItem("requimind_token");
+    localStorage.removeItem("requimind_user");
+    updateAuthUI();
+  }
+
+  wire("loginBtn", "click", login);
+  wire("registerBtn", "click", login);
+
+  // Direct modal toggles to ensure responsiveness
+  const openLogin = $("openLoginBtn");
+  if (openLogin) {
+    openLogin.onclick = (e) => {
+      e.preventDefault();
+      toggle("loginModal", false);
+    };
+  }
+
+  const closeLogin = $("closeLoginBtn");
+  if (closeLogin) {
+    closeLogin.onclick = (e) => {
+      e.preventDefault();
+      toggle("loginModal", true);
+    };
+  }
+
+  wire("logoutBtn", "click", logout);
+
   // Bootstrap initial UI
+  updateAuthUI();
   renderLiveRequirements();
   resetLiveInsights();
   console.log("Bootstrap complete.");
 });
+

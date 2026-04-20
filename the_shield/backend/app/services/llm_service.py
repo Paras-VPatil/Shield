@@ -107,7 +107,9 @@ class LLMService:
                 input_text=text,
                 max_new_tokens=1024
             )
-        except Exception:
+            return self._parse_json_response(response)
+        except Exception as e:
+            print(f"ERROR in extract_capability_insights: {e}")
             return None
 
     def _extract_with_ollama(self, text: str, instruction: str) -> Optional[str]:

@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Any
 
 from pydantic import BaseModel, Field
 
@@ -93,16 +93,16 @@ class MeetingDetailResponse(BaseModel):
     created_at: str
     updated_at: str
     domains: List[str] = Field(default_factory=list)
-    open_questions: List[str] = Field(default_factory=list)
-    resolved_questions: List[str] = Field(default_factory=list)
+    open_questions: List[Any] = Field(default_factory=list)
+    resolved_questions: List[Any] = Field(default_factory=list)
     minutes: List[dict] = Field(default_factory=list)
     analysis_history: List[dict] = Field(default_factory=list)
 
 
 class MeetingAnalyzeResponse(AnalyzeResponse):
     meeting_id: str
-    open_questions: List[str] = Field(default_factory=list)
-    resolved_questions: List[str] = Field(default_factory=list)
+    open_questions: List[Any] = Field(default_factory=list)
+    resolved_questions: List[Any] = Field(default_factory=list)
 
 class RevisionResponse(BaseModel):
     meeting_id: str

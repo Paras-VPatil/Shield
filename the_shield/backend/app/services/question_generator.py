@@ -209,7 +209,7 @@ def generate_questions(
     domain_gaps: list[str],
     requirement_text: str = "",
     domains: list[str] | None = None,
-    max_questions: int = 8,
+    max_questions: int = 12,
 ) -> list[dict]:
     questions: list[dict] = []
 

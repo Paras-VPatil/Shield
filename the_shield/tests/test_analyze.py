@@ -60,6 +60,8 @@ def test_analyze_generates_contextual_healthcare_questions(client) -> None:
 
     assert response.status_code == 200
     questions = response.json()["questions"]
+    question_texts = [q["text"] if isinstance(q, dict) else q for q in questions]
+    
     expected_subset = [
         "What specific patient information will be displayed?",
         "Which OAuth providers will be supported?",
@@ -69,4 +71,4 @@ def test_analyze_generates_contextual_healthcare_questions(client) -> None:
         "What AI analytics capabilities are required?",
     ]
     for expected in expected_subset:
-        assert expected in questions
+        assert expected in question_texts

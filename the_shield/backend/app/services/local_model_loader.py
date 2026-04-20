@@ -1,8 +1,16 @@
 import os
 from typing import Optional, Any
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import PeftModel
+try:
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from peft import PeftModel
+    _HAS_TORCH = True
+except ImportError:
+    torch = None
+    AutoModelForCausalLM = None
+    AutoTokenizer = None
+    PeftModel = None
+    _HAS_TORCH = False
 
 from app.core.settings import get_settings
 
@@ -24,10 +32,6 @@ class LocalModelLoader:
 
         if self._model is not None:
             return
-
-        import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer
-        from peft import PeftModel
 
         settings = get_settings()
         model_name = settings.ollama_model or "microsoft/Phi-3.5-mini-instruct"
@@ -63,7 +67,6 @@ class LocalModelLoader:
         if not _HAS_TORCH or not self._model or not self._tokenizer:
             return None
 
-        import torch
 
         prompt = (
             "<|system|>\n"

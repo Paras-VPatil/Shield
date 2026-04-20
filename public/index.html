@@ -19,6 +19,7 @@
         extend: {
           colors: {
             primary: "#0d59f2",
+            accent: "#0ea5e9",
             "bg-light": "#f4f6fb",
             "bg-dark": "#0d1423",
             "card-dark": "#111a2e",
@@ -33,32 +34,35 @@
       },
     };
   </script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=1.0.2">
 </head>
 
 <body
   class="bg-bg-light text-slate-900 dark:bg-bg-dark dark:text-slate-100 font-display transition-colors duration-300">
   <header
-    class="sticky top-0 z-50 border-b border-slate-200/20 bg-white/70 backdrop-blur-xl dark:border-slate-800/30 dark:bg-bg-dark/70">
+    class="sticky top-0 z-50 border-b border-slate-200/20 bg-white/70 backdrop-blur-xl dark:border-slate-800/30 dark:bg-bg-dark/70 transition-all duration-300">
     <div class="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-4 shrink-0">
         <div
-          class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/20">
-          <span class="material-symbols-outlined text-2xl">shield_with_heart</span>
+          class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-white shadow-xl border-2 border-slate-200 dark:border-white/30">
+          <img src="FullLogo.jpg" alt="RequiMind AI Logo" class="h-9 w-9 object-contain">
         </div>
-        <span
-          class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400">RequiMind</span>
+        <div class="flex flex-col">
+          <span
+            class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400">RequiMind AI</span>
+          <span class="text-[10px] uppercase tracking-widest text-primary font-bold opacity-80">Stability Edition</span>
+        </div>
       </div>
-      <nav class="hidden items-center gap-8 md:flex">
-        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
+      <nav class="hidden items-center gap-4 lg:flex">
+        <a class="text-xs xl:text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
           href="#workflow">Workflow</a>
-        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
+        <a class="text-xs xl:text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
           href="#workspace">Workspace</a>
-        <a class="text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
+        <a class="text-xs xl:text-sm font-medium text-slate-600 transition-all hover:text-primary dark:text-slate-400 dark:hover:text-white"
           href="#faq">FAQ</a>
       </nav>
       <div class="flex items-center gap-4">
-        <button id="openLoginBtn" type="button" class="btn-secondary px-6">Log in</button>
+        <button id="openLoginBtn" type="button" class="btn-secondary px-6" onclick="toggle('loginModal', false)">Log in</button>
         <div id="profileBox" class="profile-box hidden">
           <div id="profileAvatar" class="avatar-chip">U</div>
           <div class="hidden sm:block">
@@ -75,13 +79,13 @@
     <section id="landingView">
       <section class="hero-gradient relative overflow-hidden pb-28 pt-20">
         <div class="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center">
-          <div class="relative mb-12 flex h-64 w-64 items-center justify-center">
+          <div class="relative mb-12 flex h-48 w-48 items-center justify-center md:h-64 md:w-64">
             <div class="absolute inset-0 rounded-full bg-primary/20 blur-3xl"></div>
             <div
-              class="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/15 p-2 dark:bg-slate-900/40">
-              <img class="h-full w-full rounded-xl object-cover"
-                src="https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=900&q=80"
-                alt="Abstract holographic shield concept">
+              class="relative flex h-full w-full items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-white shadow-2xl p-4">
+              <img class="h-full w-full object-contain"
+                src="FullLogo.jpg"
+                alt="RequiMind AI Logo">
             </div>
           </div>
 
@@ -273,6 +277,10 @@
                     <button id="audioStartBtn" type="button" class="btn-secondary flex-1">Start Recording</button>
                     <button id="audioStopBtn" type="button" class="btn-secondary flex-1" disabled>Stop</button>
                   </div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <input type="checkbox" id="audioAsPrimary" class="rounded border-slate-300 text-primary focus:ring-primary">
+                    <label for="audioAsPrimary" class="text-xs text-slate-600 dark:text-slate-400">Use transcribed audio as primary input</label>
+                  </div>
                   <p class="text-xs text-slate-500">Status: <span id="audioStatus">Idle</span></p>
                 </div>
 
@@ -285,6 +293,46 @@
                 </div>
               </div>
             </div>
+
+            <!-- Live AI Insights Panel -->
+            <div class="mt-8 grid gap-6 md:grid-cols-2 border-t border-slate-100 dark:border-slate-800 pt-8">
+              <div>
+                <h4 class="font-bold text-sm mb-3 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-lg">fact_check</span>
+                  Detected Requirements (Draft)
+                </h4>
+                <ul id="liveRequirements" class="space-y-2 text-xs text-slate-600 dark:text-slate-400 list-disc pl-4 min-h-[100px]">
+                  <li>Waiting for input...</li>
+                </ul>
+              </div>
+              <div class="glass-card p-5 bg-primary/5 border-primary/10">
+                <h4 class="font-bold text-sm mb-3 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-lg">psychology</span>
+                  Live AI Content Strategy
+                </h4>
+                <div class="space-y-4">
+                  <div>
+                    <p class="text-[10px] font-black uppercase text-slate-400 mb-1">Analysis Status</p>
+                    <p id="liveStatus" class="text-sm font-medium text-primary">Idle</p>
+                  </div>
+                  <div>
+                    <p class="text-[10px] font-black uppercase text-slate-400 mb-1">Domains Identified</p>
+                    <ul id="liveDomains" class="flex flex-wrap gap-2 text-[10px]"></ul>
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <p class="text-[10px] font-black uppercase text-slate-400 mb-1">Ambiguity Gaps</p>
+                      <ul id="liveDomainGaps" class="text-xs text-red-500 space-y-1 list-disc pl-3"></ul>
+                    </div>
+                    <div>
+                      <p class="text-[10px] font-black uppercase text-slate-400 mb-1">Draft Questions</p>
+                      <ul id="liveQuestions" class="text-xs text-slate-600 dark:text-slate-400 space-y-1 list-disc pl-3"></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
             <div class="mt-6 flex justify-end">
               <button id="processInputBtn" type="button" class="btn-primary px-8 py-3 shadow-lg">Process
@@ -400,7 +448,7 @@
       <div class="button-row mt-4">
         <button id="registerBtn" type="button" class="btn-secondary">Register</button>
         <button id="loginBtn" type="button" class="btn-primary">Login</button>
-        <button id="closeLoginBtn" type="button" class="btn-secondary">Close</button>
+        <button id="closeLoginBtn" type="button" class="btn-secondary" onclick="toggle('loginModal', true)">Close</button>
       </div>
     </div>
   </div>
@@ -409,7 +457,7 @@
     <div class="modal-card max-w-4xl">
       <div class="flex justify-between items-center mb-4">
         <h2 id="revisionsModalTitle" class="text-2xl font-bold">Revised Insights</h2>
-        <button id="closeRevisionsBtn" class="text-slate-400 hover:text-white">&times;</button>
+        <button id="closeRevisionsBtn" class="text-slate-400 hover:text-white" onclick="toggle('revisionsModal', true)">&times;</button>
       </div>
       <div id="revisionsContent" class="space-y-6 overflow-y-auto max-h-[70vh]">
         <!-- Revision content injected here -->
@@ -417,7 +465,7 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=1.0.2"></script>
   <script>
     const ctaStartBtn = document.getElementById("ctaStartBtn");
     if (ctaStartBtn) {

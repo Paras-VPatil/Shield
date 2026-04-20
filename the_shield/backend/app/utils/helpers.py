@@ -1,12 +1,17 @@
-from typing import Iterable, List
+from typing import Iterable, List, Any
 
 
-def unique_in_order(items: Iterable[str]) -> List[str]:
+def unique_in_order(items: Iterable[Any]) -> List[Any]:
     seen = set()
-    result: List[str] = []
+    result: List[Any] = []
     for item in items:
-        if item not in seen:
-            seen.add(item)
+        key = item
+        if isinstance(item, dict):
+            # Dicts are not hashable, use a stable tuple representation
+            key = tuple(sorted(item.items()))
+        
+        if key not in seen:
+            seen.add(key)
             result.append(item)
     return result
 

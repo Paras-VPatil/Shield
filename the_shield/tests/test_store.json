@@ -1,0 +1,209 @@
+{
+  "users": [],
+  "meetings": [
+    {
+      "id": "74c1e73f-9303-4cb2-99ff-e336c418654f",
+      "title": "Sprint Test",
+      "owner_id": "test_user",
+      "created_at": "2026-04-20T08:27:29.940906+00:00",
+      "updated_at": "2026-04-20T08:27:31.929440+00:00",
+      "domains": [],
+      "minutes": [
+        {
+          "id": "1f76e1dd-e386-4b52-92fd-5e7cdf515728",
+          "source": "text",
+          "text": "We need to build a new CRM system. Phase 1: Auth and Database. Phase 2: UI and API. Phase 3: Deployment.",
+          "created_at": "2026-04-20T08:27:31.929440+00:00"
+        }
+      ],
+      "analysis_history": [
+        {
+          "id": "765b8a38-60ee-44e3-9b43-a3cb45c5ffaf",
+          "created_at": "2026-04-20T08:27:31.929440+00:00",
+          "input_text": "We need to build a new CRM system. Phase 1: Auth and Database. Phase 2: UI and API. Phase 3: Deployment.",
+          "analysis": {
+            "status": "gap_detected",
+            "message": "Analyzed 4 requirement(s). Overall status: gap_detected.",
+            "domains": [],
+            "questions": [
+              {
+                "text": "What exact action should be performed?",
+                "is_tech": false
+              },
+              {
+                "text": "What system component or entity is affected by this action?",
+                "is_tech": false
+              },
+              {
+                "text": "Who is the primary actor performing this requirement?",
+                "is_tech": false
+              },
+              {
+                "text": "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+                "is_tech": false
+              },
+              {
+                "text": "How should session timeout, refresh, and logout invalidation be handled?",
+                "is_tech": true
+              },
+              {
+                "text": "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+                "is_tech": false
+              },
+              {
+                "text": "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+                "is_tech": false
+              }
+            ],
+            "resolved_now": [],
+            "open_after_analysis": [
+              {
+                "text": "What exact action should be performed?",
+                "is_tech": false
+              },
+              {
+                "text": "What system component or entity is affected by this action?",
+                "is_tech": false
+              },
+              {
+                "text": "Who is the primary actor performing this requirement?",
+                "is_tech": false
+              },
+              {
+                "text": "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+                "is_tech": false
+              },
+              {
+                "text": "How should session timeout, refresh, and logout invalidation be handled?",
+                "is_tech": true
+              },
+              {
+                "text": "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+                "is_tech": false
+              },
+              {
+                "text": "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+                "is_tech": false
+              }
+            ],
+            "sprint_plan": [
+              {
+                "number": 1,
+                "goal": "Discovery & General Architecture",
+                "timeline": "2 Weeks",
+                "tasks": [
+                  {
+                    "task": "Analyze core requirement boundaries",
+                    "story_points": 3,
+                    "status": "todo"
+                  },
+                  {
+                    "task": "Define general data models",
+                    "story_points": 5,
+                    "status": "todo"
+                  },
+                  {
+                    "task": "Initial stakeholder review",
+                    "story_points": 2,
+                    "status": "todo"
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "goal": "Core Implementation & Integration",
+                "timeline": "3 Weeks",
+                "tasks": [
+                  {
+                    "task": "Develop primary functional modules",
+                    "story_points": 8,
+                    "status": "todo"
+                  },
+                  {
+                    "task": "Integrate with suggested tech stack",
+                    "story_points": 5,
+                    "status": "todo"
+                  },
+                  {
+                    "task": "Unit & Integration testing",
+                    "story_points": 3,
+                    "status": "todo"
+                  }
+                ]
+              },
+              {
+                "number": 3,
+                "goal": "Hardening & Beta Release",
+                "timeline": "2 Weeks",
+                "tasks": [
+                  {
+                    "task": "Performance & Security audit",
+                    "story_points": 4,
+                    "status": "todo"
+                  },
+                  {
+                    "task": "User acceptance testing (UAT)",
+                    "story_points": 3,
+                    "status": "todo"
+                  },
+                  {
+                    "task": "Production environment setup",
+                    "story_points": 2,
+                    "status": "todo"
+                  }
+                ]
+              }
+            ],
+            "proprietary_tool_suggestions": [
+              {
+                "name": "AWS/Azure",
+                "category": "Infrastructure"
+              },
+              {
+                "name": "Datadog",
+                "category": "Monitoring"
+              },
+              {
+                "name": "Slack/Teams",
+                "category": "Collaboration"
+              }
+            ]
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "text": "What exact action should be performed?",
+          "is_tech": false
+        },
+        {
+          "text": "What system component or entity is affected by this action?",
+          "is_tech": false
+        },
+        {
+          "text": "Who is the primary actor performing this requirement?",
+          "is_tech": false
+        },
+        {
+          "text": "Which authentication methods should be supported (password, OAuth, SSO, MFA)?",
+          "is_tech": false
+        },
+        {
+          "text": "How should session timeout, refresh, and logout invalidation be handled?",
+          "is_tech": true
+        },
+        {
+          "text": "What should happen after repeated failed login attempts (lockout, cooldown, alerts)?",
+          "is_tech": false
+        },
+        {
+          "text": "What account recovery flow is required (email OTP, SMS OTP, reset link)?",
+          "is_tech": false
+        }
+      ],
+      "resolved_questions": [],
+      "speaker_notes": []
+    }
+  ],
+  "sessions": []
+}

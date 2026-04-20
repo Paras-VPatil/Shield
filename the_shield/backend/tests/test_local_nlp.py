@@ -37,11 +37,12 @@ def test_llm_service_local_summarize(mock_get_loader):
         summary = service.summarize("Test text", {}, "status", [], [], [])
         assert "local summary" in summary
 
-def test_llm_service_extract_capability_insights_json():
+@patch('app.services.llm_service.get_local_model_loader')
+def test_llm_service_extract_capability_insights_json(mock_get_loader):
     from app.services.llm_service import LLMService
-    service = LLMService()
+    mock_loader = MagicMock()
+    
     mock_response = """
-    Here is the insight:
     {
         "complexity_score": 85,
         "decision_readiness_score": 70,
@@ -53,12 +54,11 @@ def test_llm_service_extract_capability_insights_json():
         "visualization_recommendations": ["Chart"]
     }
     """
-    with patch.object(service, '_summarize_with_local_model', return_value=mock_response):
-        # We need to ensure mode is local
-        with patch.dict('os.environ', {'LLM_MODE': 'local'}):
-            insights = service.extract_capability_insights("text")
-            # Note: extract_capability_insights handles its own generate call
-            # So we mock generate directly on its loader
-            service.local_loader.generate.return_value = mock_response
-            insights = service.extract_capability_insights("text")
-            assert insights["complexity_score"] == 85
+    mock_loader.generate.return_value = mock_response
+    mock_get_loader.return_value = mock_loader
+    
+    # We need to ensure mode is local
+    with patch.dict('os.environ', {'LLM_MODE': 'local'}):
+        service = LLMService()
+        insights = service.extract_capability_insights("text")
+        assert insights["complexity_score"] == 85

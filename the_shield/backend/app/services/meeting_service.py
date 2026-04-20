@@ -1,7 +1,7 @@
 import io
 import re
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Optional, Any
 from uuid import uuid4
 
 from pypdf import PdfReader
@@ -135,21 +135,24 @@ def _resolved_by_patterns(question: str, text: str) -> bool:
     return False
 
 
-def _match_resolved_questions(open_questions: list[str], clarification_text: str) -> tuple[list[str], list[str]]:
+def _match_resolved_questions(open_questions: list[Any], clarification_text: str) -> tuple[list[Any], list[Any]]:
     lower = clarification_text.lower()
-    resolved: list[str] = []
-    still_open: list[str] = []
+    resolved: list[Any] = []
+    still_open: list[Any] = []
     decision_cues = ["will ", "must ", "should ", "use ", "supports ", "follow ", "chosen ", "decided "]
     has_decision = any(cue in lower for cue in decision_cues)
 
     for question in open_questions:
-        keywords = _question_keywords(question)
+        # Handle dict or string
+        q_text = question["text"] if isinstance(question, dict) else question
+        
+        keywords = _question_keywords(q_text)
         if not keywords:
             still_open.append(question)
             continue
         hits = sum(1 for keyword in keywords if keyword in lower)
         dynamic_threshold = 1 if len(keywords) <= 3 else 2
-        if (has_decision and hits >= dynamic_threshold) or _resolved_by_patterns(question, lower):
+        if (has_decision and hits >= dynamic_threshold) or _resolved_by_patterns(q_text, lower):
             resolved.append(question)
         else:
             still_open.append(question)
