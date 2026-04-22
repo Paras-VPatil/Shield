@@ -347,6 +347,19 @@
             <h3 class="panel-title">Step 2: Ambiguity Detection & Questions</h3>
             <p class="text-sm text-slate-500 mb-4">Please provide clarification on the following generated questions.
             </p>
+            
+            <div class="mb-6 flex flex-col sm:flex-row gap-4 items-center">
+              <div class="relative w-full">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+                <input id="questionSearch" type="text" placeholder="Filter questions..." class="pl-9 text-sm py-2">
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <button id="prevPageBtn" class="btn-secondary py-1 px-3 text-xs" disabled>&lt;</button>
+                <span id="pageInfo" class="text-xs font-bold w-16 text-center">Page 1/1</span>
+                <button id="nextPageBtn" class="btn-secondary py-1 px-3 text-xs" disabled>&gt;</button>
+              </div>
+            </div>
+
             <div class="grid gap-6 md:grid-cols-2 mb-6">
               <div>
                 <h4

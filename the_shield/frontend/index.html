@@ -256,20 +256,49 @@
           </section>
 
           <section id="step1_Input" class="workspace-card lg:col-span-2">
-            <h3 class="panel-title">Step 1: Unified Requirement Input</h3>
-            <p class="hint-text mb-4">Input via Text, Audio, or Document Upload. All inputs will be merged for analysis.
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="panel-title mb-0">Step 1: Unified Requirement Input</h3>
+              <div class="flex gap-2">
+                <span id="jobStatusBadge" class="hidden px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 animate-pulse">Processing Bulk Job...</span>
+              </div>
+            </div>
+            
+            <p class="hint-text mb-4">Input via Text, Audio, or Document Upload. For massive volume (100k+), use the Bulk Upload option.
             </p>
 
-            <div class="grid gap-6 md:grid-cols-2">
+            <div class="grid gap-6 lg:grid-cols-3">
               <!-- Text / Combined Area -->
-              <div>
+              <div class="lg:col-span-2">
                 <label class="field-label" for="requirementText">Requirement Notes & Merged Content</label>
                 <textarea id="requirementText" rows="10"
                   placeholder="Type notes here or use voice/upload. Content will appear here."></textarea>
               </div>
-              <div>
-                <label class="field-label" for="speakerSelect">Current Speaker</label>
-                <select id="speakerSelect"></select>
+              
+              <div class="space-y-6">
+                <div>
+                  <label class="field-label" for="speakerSelect">Current Speaker</label>
+                  <select id="speakerSelect"></select>
+                </div>
+
+                <div class="p-4 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50">
+                  <h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-lg">upload_file</span>
+                    Bulk Upload (Large Volume)
+                  </h4>
+                  <input id="bulkFile" type="file" accept=".txt,.csv" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                  <p class="text-[10px] text-slate-400 mt-2">Supports .txt (one req per line) or .csv</p>
+                  <button id="bulkUploadBtn" type="button" class="btn-secondary w-full mt-4 text-xs py-2">Start Bulk Analysis</button>
+                </div>
+
+                <div id="jobProgressContainer" class="hidden">
+                  <div class="flex justify-between items-center mb-1">
+                    <span id="jobProgressLabel" class="text-[10px] font-bold text-slate-500">Progress: 0%</span>
+                    <span id="jobProgressCount" class="text-[10px] text-slate-400">0/0</span>
+                  </div>
+                  <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div id="jobProgressBar" class="bg-primary h-full transition-all duration-500" style="width: 0%"></div>
+                  </div>
+                </div>
               </div>
             </div>
 

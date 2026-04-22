@@ -6,6 +6,13 @@
       "password_salt": "1a2e34cf4fcd89e5",
       "password_hash": "b3fbee4497bf87b34e5a9f1d6b5db6eb24eed6e776f36a38473f626ffdaa2781",
       "created_at": "2026-03-25T15:44:03.290480+00:00"
+    },
+    {
+      "id": "8dc4d4ea-0dab-4492-ba77-8415c29950c1",
+      "username": "stress_test_user",
+      "password_salt": "4be498e04e286e05",
+      "password_hash": "f681270caed1e7f102efa3b69c57a372c293530e85e1f89f4124eae7fb81a079",
+      "created_at": "2026-04-22T07:53:13.510101+00:00"
     }
   ],
   "meetings": [
@@ -127,6 +134,11 @@
       "token": "fkQwHElNSGcg3UcDxUab-dhwt4r9lGIiFy7JjS87Vio",
       "user_id": "1efdc44a-1738-47f4-a2bb-02d278297243",
       "created_at": "2026-03-25T15:44:03.308216+00:00"
+    },
+    {
+      "token": "vqDV7y8ORj-kFZ6my4B5bo2DSfrQxnINrKU9ijqgqGA",
+      "user_id": "8dc4d4ea-0dab-4492-ba77-8415c29950c1",
+      "created_at": "2026-04-22T07:53:13.518787+00:00"
     }
   ]
 }

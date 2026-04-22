@@ -401,3 +401,92 @@ def get_meeting_revisions(user_id: str, meeting_id: str) -> dict:
         "old_status": prev_snap.get("status"),
         "new_status": curr_snap.get("status"),
     }
+def start_bulk_analysis(
+    user_id: str,
+    meeting_id: str,
+    requirements: list[str],
+) -> dict:
+    job_id = str(uuid4())
+    data = load_db()
+    
+    job = {
+        "job_id": job_id,
+        "owner_id": user_id,
+        "meeting_id": meeting_id,
+        "status": "pending",
+        "progress": 0.0,
+        "total_count": len(requirements),
+        "processed_count": 0,
+        "result": None,
+        "error": None,
+        "created_at": _now_iso(),
+    }
+    data.setdefault("jobs", []).append(job)
+    save_db(data)
+    return job
+
+
+def get_job_status(user_id: str, job_id: str) -> Optional[dict]:
+    data = load_db()
+    return next(
+        (job for job in data.get("jobs", []) if job["job_id"] == job_id and job["owner_id"] == user_id),
+        None,
+    )
+
+
+def process_bulk_job(
+    job_id: str,
+    user_id: str,
+    meeting_id: str,
+    requirements: list[str],
+    llm_service: LLMService,
+) -> None:
+    # This is intended to be run in a background task
+    try:
+        data = load_db()
+        job_idx = next(
+            (i for i, j in enumerate(data.get("jobs", [])) if j["job_id"] == job_id),
+            -1
+        )
+        if job_idx == -1:
+            return
+
+        data["jobs"][job_idx]["status"] = "processing"
+        save_db(data)
+
+        # Batch processing (e.g., 20 at a time to stay responsive)
+        batch_size = 20
+        all_item_analyses = []
+        total = len(requirements)
+        
+        for i in range(0, total, batch_size):
+            batch = requirements[i:i + batch_size]
+            for req in batch:
+                # Mock or real partial analysis
+                # For bulk, we might skip deep context to save time/tokens unless requested
+                analysis = run_requirement_analysis(req, llm_service)
+                all_item_analyses.append(analysis)
+            
+            # Update progress
+            data = load_db()
+            data["jobs"][job_idx]["processed_count"] = len(all_item_analyses)
+            data["jobs"][job_idx]["progress"] = round((len(all_item_analyses) / total) * 100, 2)
+            save_db(data)
+
+        # Final aggregation
+        data = load_db()
+        data["jobs"][job_idx]["status"] = "completed"
+        data["jobs"][job_idx]["progress"] = 100.0
+        data["jobs"][job_idx]["result"] = {
+            "total_processed": total,
+            "item_analyses": all_item_analyses[:500] # Limit result size for UI stability
+        }
+        save_db(data)
+
+    except Exception as e:
+        data = load_db()
+        job_idx = next((i for i, j in enumerate(data.get("jobs", [])) if j["job_id"] == job_id), -1)
+        if job_idx != -1:
+            data["jobs"][job_idx]["status"] = "failed"
+            data["jobs"][job_idx]["error"] = str(e)
+            save_db(data)

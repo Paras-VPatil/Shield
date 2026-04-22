@@ -104,14 +104,25 @@ class MeetingAnalyzeResponse(AnalyzeResponse):
     open_questions: List[Any] = Field(default_factory=list)
     resolved_questions: List[Any] = Field(default_factory=list)
 
+class BulkJobStatus(BaseModel):
+    job_id: str
+    status: Literal["pending", "processing", "completed", "failed"]
+    progress: float = 0.0
+    total_count: int = 0
+    processed_count: int = 0
+    result: Optional[Any] = None
+    error: Optional[str] = None
+    created_at: str
+
+
 class RevisionResponse(BaseModel):
     meeting_id: str
-    previous_id: str | None = None
+    previous_id: Optional[str] = None
     current_id: str
     added_requirements: List[str] = Field(default_factory=list)
     removed_requirements: List[str] = Field(default_factory=list)
     added_questions: List[str] = Field(default_factory=list)
     removed_questions: List[str] = Field(default_factory=list)
     status_changed: bool = False
-    old_status: str | None = None
-    new_status: str | None = None
+    old_status: Optional[str] = None
+    new_status: Optional[str] = None

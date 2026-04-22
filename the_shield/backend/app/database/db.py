@@ -22,6 +22,7 @@ DEFAULT_DATA = {
     "users": [],
     "sessions": [],
     "meetings": [],
+    "jobs": [],
 }
 _MONGO_CLIENT: MongoClient | None = None  # type: ignore[type-arg]
 

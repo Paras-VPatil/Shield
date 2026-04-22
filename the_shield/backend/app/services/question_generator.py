@@ -213,10 +213,27 @@ def generate_questions(
 ) -> list[dict]:
     questions: list[dict] = []
 
+    # Priority Keywords Mapping
+    PRIORITY_KEYWORDS = {
+        1: ["security", "privacy", "hipaa", "gdpr", "compliance", "encrypt", "auth", "lockout", "fraud", "legal", "audit"],
+        2: ["performance", "latency", "throughput", "scale", "sync", "database", "api", "integration", "workflow", "actor", "action"],
+        3: ["ui", "ux", "display", "dashboard", "report", "format", "color", "style", "optimization"]
+    }
+
+    def calculate_priority(text: str, is_tech: bool) -> int:
+        text_lower = text.lower()
+        for p, kws in PRIORITY_KEYWORDS.items():
+            if any(kw in text_lower for kw in kws):
+                return p
+        if is_tech:
+            return 2
+        return 3
+
     for field in missing_fields:
         question = MISSING_FIELD_QUESTIONS.get(field)
         if question:
-            questions.append({"text": question, "is_tech": False})
+            priority = 2 if field in ["action", "actor"] else 3
+            questions.append({"text": question, "is_tech": False, "priority": priority})
 
     tech_keywords = ["oauth", "database", "api", "integration", "session", "timeout", "latency", "tech stack", "framework"]
     
@@ -224,42 +241,56 @@ def generate_questions(
         template_question = DOMAIN_GAP_QUESTIONS.get(gap)
         is_tech = any(tk in gap.lower() for tk in tech_keywords)
         if template_question:
-            questions.append({"text": template_question, "is_tech": is_tech})
+            priority = calculate_priority(template_question, is_tech)
+            questions.append({"text": template_question, "is_tech": is_tech, "priority": priority})
             continue
 
         if ":" in gap:
             domain, feature = gap.split(":", maxsplit=1)
             is_tech = any(tk in feature.lower() for tk in tech_keywords)
+            text = f"For {domain.strip()}, how should the system handle {feature.strip()}?"
+            priority = calculate_priority(text, is_tech)
             questions.append({
-                "text": f"For {domain.strip()}, how should the system handle {feature.strip()}?",
-                "is_tech": is_tech
+                "text": text,
+                "is_tech": is_tech,
+                "priority": priority
             })
         else:
-            questions.append({"text": f"Can you clarify the missing detail: {gap}?", "is_tech": False})
+            text = f"Can you clarify the missing detail: {gap}?"
+            priority = calculate_priority(text, False)
+            questions.append({"text": text, "is_tech": False, "priority": priority})
 
     if requirement_text.strip():
         for q in _generate_contextual_questions(requirement_text):
             is_tech = any(tk in q.lower() for tk in tech_keywords)
-            questions.append({"text": q, "is_tech": is_tech})
+            priority = calculate_priority(q, is_tech)
+            questions.append({"text": q, "is_tech": is_tech, "priority": priority})
 
     if domains:
         for q in _generate_domain_questions(domains):
             is_tech = any(tk in q.lower() for tk in tech_keywords)
-            questions.append({"text": q, "is_tech": is_tech})
+            priority = calculate_priority(q, is_tech)
+            questions.append({"text": q, "is_tech": is_tech, "priority": priority})
 
     has_tech = any(q["is_tech"] for q in questions)
     if not has_tech:
         questions.append({
             "text": "What are the latency, throughput, and scalability expectations for this feature?", 
-            "is_tech": True
+            "is_tech": True,
+            "priority": 2
         })
         questions.append({
             "text": "What data privacy standards (e.g. at-rest encryption) and database persistence models should this rely on?", 
-            "is_tech": True
+            "is_tech": True,
+            "priority": 1
         })
 
     if (missing_fields or domain_gaps) and len(questions) < 4:
-        questions.append({"text": "What are the acceptance criteria and exact edge cases for this requirement?", "is_tech": False})
+        questions.append({
+            "text": "What are the acceptance criteria and exact edge cases for this requirement?", 
+            "is_tech": False,
+            "priority": 2
+        })
 
     reasonable_dict = {}
     for q in questions:
@@ -268,4 +299,7 @@ def generate_questions(
             reasonable_dict[text] = q
 
     deduped = list(reasonable_dict.values())
-    return deduped[:max_questions]
+    # Sort by priority (1 is highest), then by tech vs functional
+    sorted_questions = sorted(deduped, key=lambda x: (x.get("priority", 3), x.get("is_tech", False)))
+    
+    return sorted_questions[:max_questions]

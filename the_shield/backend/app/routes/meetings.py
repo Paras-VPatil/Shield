@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status, BackgroundTasks
 from fastapi.responses import PlainTextResponse
 
 from app.core.security import get_current_user
@@ -8,6 +8,7 @@ from app.models.response_models import (
     MeetingDetailResponse,
     MeetingSummary,
     RevisionResponse,
+    BulkJobStatus,
 )
 from app.services.llm_service import LLMService
 from app.services.meeting_service import (
@@ -18,6 +19,9 @@ from app.services.meeting_service import (
     get_meeting,
     get_meeting_revisions,
     list_meetings,
+    start_bulk_analysis,
+    get_job_status,
+    process_bulk_job,
 )
 
 router = APIRouter(prefix="/meetings", tags=["meetings"])
@@ -98,6 +102,40 @@ async def analyze_meeting_endpoint(
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     return MeetingAnalyzeResponse(**analysis)
+
+
+@router.post("/{meeting_id}/bulk", response_model=BulkJobStatus)
+async def analyze_bulk_endpoint(
+    meeting_id: str,
+    payload: dict, # Expecting {"requirements": [...]}
+    background_tasks: BackgroundTasks,
+    user: dict = Depends(get_current_user),
+) -> BulkJobStatus:
+    requirements = payload.get("requirements", [])
+    if not requirements:
+        raise HTTPException(status_code=400, detail="No requirements provided.")
+    
+    job = start_bulk_analysis(user["id"], meeting_id, requirements)
+    background_tasks.add_task(
+        process_bulk_job,
+        job["job_id"],
+        user["id"],
+        meeting_id,
+        requirements,
+        llm_service
+    )
+    return BulkJobStatus(**job)
+
+
+@router.get("/jobs/{job_id}", response_model=BulkJobStatus)
+async def get_job_status_endpoint(
+    job_id: str,
+    user: dict = Depends(get_current_user),
+) -> BulkJobStatus:
+    job = get_job_status(user["id"], job_id)
+    if job is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found.")
+    return BulkJobStatus(**job)
 
 
 @router.get("/{meeting_id}/transcript")

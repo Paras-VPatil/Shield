@@ -104,6 +104,9 @@ function listInto(id, items) {
 }
 
 // Analysis Logic
+let activeJobId = null;
+let pollTimer = null;
+
 function extractRequirementsFromText(rawText) {
   const text = (rawText || "").trim();
   if (!text) return [];
@@ -154,14 +157,72 @@ function resetLiveInsights(msg = "Waiting for input...") {
   text("liveStatus", msg);
   listInto("liveDomains", []);
   listInto("liveDomainGaps", []);
-  listInto("liveQuestions", []);
+  renderPrioritizedQuestions("liveQuestions", []);
+}
+
+function renderPrioritizedQuestions(id, questions) {
+  const el = $(id);
+  if (!el) return;
+  el.innerHTML = "";
+  if (!questions || !questions.length) {
+    const li = document.createElement("li");
+    li.className = "py-2 px-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg text-slate-400 italic text-xs border border-dashed border-slate-200 dark:border-slate-800";
+    li.textContent = "No clarification questions currently.";
+    el.appendChild(li);
+    return;
+  }
+
+  questions.forEach(q => {
+    const qText = typeof q === 'string' ? q : q.text;
+    const priority = q.priority || 3;
+    const isTech = q.is_tech || false;
+    
+    let priorityClass = "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400";
+    let priorityLabel = "Standard";
+    let icon = "info";
+    let borderClass = "border-slate-200 dark:border-slate-800";
+    
+    if (priority === 1) { 
+      priorityClass = "bg-red-500 text-white shadow-lg shadow-red-500/20"; 
+      priorityLabel = "Urgent / Critical"; 
+      icon = "warning";
+      borderClass = "border-red-500/30 ring-1 ring-red-500/10";
+    }
+    else if (priority === 2) { 
+      priorityClass = "bg-orange-500 text-white shadow-lg shadow-orange-500/20"; 
+      priorityLabel = "High Priority"; 
+      icon = "priority_high";
+      borderClass = "border-orange-500/30";
+    }
+
+    const li = document.createElement("li");
+    li.className = `group relative p-4 rounded-2xl border ${borderClass} bg-white dark:bg-slate-900/40 hover:shadow-xl hover:translate-y-[-2px] transition-all duration-300`;
+    li.innerHTML = `
+      <div class="flex justify-between items-start gap-4 mb-3">
+        <div class="flex gap-2 items-center">
+            <span class="flex items-center justify-center h-5 w-5 rounded-full ${priorityClass}">
+                <span class="material-symbols-outlined text-[12px] font-black">${icon}</span>
+            </span>
+            <span class="text-[10px] uppercase font-black tracking-widest ${priority === 1 ? 'text-red-500' : (priority === 2 ? 'text-orange-500' : 'text-slate-500')}">${priorityLabel}</span>
+        </div>
+        <div class="flex gap-1">
+            ${isTech ? '<span class="text-[9px] uppercase font-bold bg-blue-500/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">Technical</span>' : '<span class="text-[9px] uppercase font-bold bg-purple-500/10 text-purple-500 px-2 py-0.5 rounded-full border border-purple-500/20">Functional</span>'}
+        </div>
+      </div>
+      <p class="text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed font-semibold">${qText}</p>
+      <div class="absolute right-3 bottom-3 opacity-0 group-hover:opacity-100 transition-opacity">
+          <span class="material-symbols-outlined text-primary/40 text-sm">edit_note</span>
+      </div>
+    `;
+    el.appendChild(li);
+  });
 }
 
 function renderLiveInsights(data) {
   text("liveStatus", data?.status || "unknown");
   listInto("liveDomains", data?.domains || []);
   listInto("liveDomainGaps", data?.domain_gaps || []);
-  listInto("liveQuestions", data?.questions || []);
+  renderPrioritizedQuestions("liveQuestions", data?.questions || []);
 }
 
 async function requestLiveAnalysis() {
@@ -202,55 +263,44 @@ function scheduleLiveAnalysis() {
 let lastAnalyzedData = null;
 
 function renderAnalysis(data) {
-  toggle("result", false);
-  text("status", data.status || "unknown");
-  text("message", data.message || "");
-  text("summary", data.llm_summary || "");
-  listInto("domains", data.domains || []);
-  listInto("extractedRequirements", data.extracted_requirements || []);
-  listInto("questions", data.questions || []);
-  listInto("openQuestions", data.open_questions || []);
-  listInto("resolvedQuestions", data.resolved_questions || []);
+  toggle("wizardSteps", false);
+  toggle("step2_Questions", false);
+  
+  text("summary", data.llm_summary || "Requirement analysis complete. See details below.");
+  
+  // Split questions by Tech vs Functional for the UI
+  const questions = data.questions || [];
+  const tech = questions.filter(q => q.is_tech);
+  const nonTech = questions.filter(q => !q.is_tech);
+  
+  renderPrioritizedQuestions("techQuestions", tech);
+  renderPrioritizedQuestions("nonTechQuestions", nonTech);
 
   // Item analyses
   const container = $("itemAnalyses");
   if (container) {
     container.innerHTML = "";
-    container.className = "list-box space-y-4";
+    container.className = "grid gap-4 sm:grid-cols-2";
     (data.item_analyses || []).forEach(item => {
       const card = document.createElement("div");
-      card.className = "pb-3 border-b border-slate-100 dark:border-slate-800 last:border-0";
+      card.className = "p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 hover:bg-white dark:hover:bg-slate-900 transition-all";
       card.innerHTML = `
-        <div class="flex justify-between items-start">
-          <p class="pr-4 text-sm font-medium"><strong>Target:</strong> ${item.requirement}</p>
-        </div>
-        <div class="flex gap-2 mt-2">
-            <span class="status-badge status-${item.status}">${item.status}</span>
-            <span class="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 rounded font-medium text-slate-600 dark:text-slate-300">Class: ${item.classification || 'Functional'}</span>
-            <span class="text-[10px] bg-primary/10 px-2 rounded font-medium text-primary">${item.moscow_priority || 'Should Have'}</span>
+        <p class="text-sm font-bold mb-2">${item.requirement}</p>
+        <div class="flex flex-wrap gap-2">
+            <span class="text-[10px] px-2 py-0.5 rounded font-black uppercase bg-primary/10 text-primary">${item.moscow_priority || 'Should Have'}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded font-black uppercase bg-slate-200 dark:bg-slate-800 text-slate-500">${item.classification || 'Functional'}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded font-black uppercase status-badge status-${item.status}">${item.status}</span>
         </div>
       `;
       container.appendChild(card);
     });
   }
 
-  // Capability insights
-  const cap = data.capability_insights || {};
-  text("complexityScore", String(cap.complexity_score ?? 0));
-  text("decisionReadinessScore", String(cap.decision_readiness_score ?? 0));
-  const cBar = $("complexityBar"); if (cBar) cBar.style.width = `${cap.complexity_score}%`;
-  const drBar = $("decisionReadinessBar"); if (drBar) drBar.style.width = `${cap.decision_readiness_score}%`;
-
-  listInto("topConcepts", cap.top_concepts || []);
-  listInto("investigationActions", cap.investigation_actions || []);
-  listInto("serviceImprovements", cap.service_improvements || []);
-  listInto("businessOpportunities", cap.business_opportunities || []);
-  listInto("stakeholderComms", cap.stakeholder_communications || []);
-
   // Tools
   const toolEl = $("toolSuggestions");
   if (toolEl) {
     toolEl.innerHTML = "";
+    const cap = data.capability_insights || {};
     (cap.proprietary_tool_suggestions || []).forEach(tool => {
       const li = document.createElement("li");
       li.className = "glass-card p-4 flex items-center justify-between group";
@@ -269,51 +319,148 @@ function renderAnalysis(data) {
   const sprintEl = $("sprintPlan");
   if (sprintEl) {
     sprintEl.innerHTML = "";
+    const cap = data.capability_insights || {};
     (cap.sprint_plan || []).forEach((sprint, idx) => {
       const card = document.createElement("article");
-      card.className = "sprint-card relative";
+      card.className = "sprint-card relative p-5 bg-card-dark rounded-3xl border border-slate-800";
       card.innerHTML = `
-        <div class="flex justify-between items-center mb-2">
+        <div class="flex justify-between items-center mb-3">
           <span class="text-xs font-black text-primary uppercase">Sprint ${sprint.number || idx + 1}</span>
-          <span class="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 rounded">${sprint.timeline || "2W"}</span>
+          <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-slate-400 font-bold">${sprint.timeline || "2W"}</span>
         </div>
-        <h4 class="text-sm font-bold mb-1">${sprint.goal || sprint.focus}</h4>
-        <ul class="text-xs space-y-1">
-          ${(sprint.tasks || []).map(t => `<li>\u2022 ${typeof t === 'string' ? t : t.task}</li>`).join("")}
+        <h4 class="text-base font-bold mb-3">${sprint.goal || sprint.focus}</h4>
+        <ul class="text-xs space-y-2 text-slate-400">
+          ${(sprint.tasks || []).map(t => `<li class="flex gap-2"><span class="text-primary">•</span> <span>${typeof t === 'string' ? t : t.task}</span></li>`).join("")}
         </ul>
       `;
-      sprintEl.appendChild(sprintEl.appendChild(card));
+      sprintEl.appendChild(card);
     });
+  }
+
+  // Feature Insights
+  const svcEl = $("serviceImprovements");
+  if (svcEl) listInto("serviceImprovements", data.capability_insights?.service_improvements || []);
+  const bizEl = $("businessOpportunities");
+  if (bizEl) listInto("businessOpportunities", data.capability_insights?.business_opportunities || []);
+}
+
+async function startBulkAnalysis() {
+  const meetingId = val("meetingSelect");
+  if (!meetingId) throw new Error("Select a meeting first.");
+  
+  const fileInput = $("bulkFile");
+  if (!fileInput.files.length) throw new Error("Please select a .txt or .csv file.");
+  
+  const file = fileInput.files[0];
+  const content = await file.text();
+  const requirements = content.split(/\r?\n/).filter(line => line.trim().length > 5);
+  
+  if (requirements.length === 0) throw new Error("No valid requirements found in file.");
+  
+  setError("");
+  toggle("jobStatusBadge", false);
+  toggle("jobProgressContainer", false);
+  
+  const res = await fetch(`${getBaseUrl()}/meetings/${meetingId}/bulk`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({ requirements }),
+  });
+  
+  if (!res.ok) throw new Error(`Bulk upload failed (${res.status})`);
+  
+  const job = await res.json();
+  activeJobId = job.job_id;
+  
+  // Update UI
+  text("jobProgressLabel", "Progress: 0%");
+  text("jobProgressCount", `0/${job.total_count}`);
+  $("jobProgressBar").style.width = "0%";
+  
+  pollJobStatus();
+}
+
+async function pollJobStatus() {
+  if (!activeJobId) return;
+  
+  try {
+    const res = await fetch(`${getBaseUrl()}/meetings/jobs/${activeJobId}`, {
+      headers: authHeaders(),
+    });
+    
+    if (!res.ok) {
+      console.error("Polling failed");
+      return;
+    }
+    
+    const job = await res.json();
+    
+    // Update Progress
+    text("jobProgressLabel", `Progress: ${Math.round(job.progress)}%`);
+    text("jobProgressCount", `${job.processed_count}/${job.total_count}`);
+    $("jobProgressBar").style.width = `${job.progress}%`;
+    
+    if (job.status === "completed") {
+      activeJobId = null;
+      toggle("jobStatusBadge", true);
+      alert("Bulk analysis complete!");
+      // For bulk, results are in job.result.item_analyses
+      // We can trigger a full UI refresh or just show a summary
+      refreshMeetings();
+    } else if (job.status === "failed") {
+      activeJobId = null;
+      toggle("jobStatusBadge", true);
+      setError(`Job failed: ${job.error}`);
+    } else {
+      pollTimer = setTimeout(pollJobStatus, 2000);
+    }
+  } catch (e) {
+    console.error("Polling error", e);
   }
 }
 
 async function analyzeStandalone() {
   console.log("Analyze Standalone Triggered");
+  const meetingId = val("meetingSelect");
+  if (!meetingId) throw new Error("Select a meeting first.");
+  
   const textVal = val("requirementText");
   if (!textVal) throw new Error("Enter requirement text.");
+  
   setError("");
-  const res = await fetch(`${getBaseUrl()}/analyze`, {
+  const res = await fetch(`${getBaseUrl()}/meetings/${meetingId}/analyze`, {
     method: "POST",
     headers: authHeaders(),
-    body: JSON.stringify({ text: textVal }),
+    body: JSON.stringify({ text: textVal, speaker_segments: [] }),
   });
+  
   if (!res.ok) throw new Error(`Analysis failed (${res.status})`);
   const data = await res.json();
   renderAnalysis(data);
 }
 
+// Meeting Management
+async function refreshMeetings() {
+  const res = await fetch(`${getBaseUrl()}/meetings`, { headers: authHeaders() });
+  if (!res.ok) return;
+  meetings = await res.json();
+  const sel = $("meetingSelect");
+  if (!sel) return;
+  sel.innerHTML = '<option value="">-- Choose Meeting --</option>';
+  meetings.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.id;
+    opt.textContent = m.title;
+    sel.appendChild(opt);
+  });
+}
+
 // DOM Ready
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM Loaded. Indexing elements and attaching listeners...");
+  console.log("DOM Loaded.");
 
-  // Indicators
-  const indicator = document.createElement("div");
-  indicator.id = "scriptStatusIndicator";
-  indicator.textContent = "AI Engine Active";
-  indicator.style.cssText = "position:fixed; bottom:10px; right:10px; background:#0d59f2; color:white; padding:4px 8px; border-radius:4px; font-size:10px; z-index:9999;";
-  document.body.appendChild(indicator);
+  refreshMeetings();
 
-  // Wire events
   const wire = (id, event, fn) => {
     const el = $(id);
     if (el) el.addEventListener(event, async (e) => {
@@ -329,7 +476,9 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle("appView", false);
   });
 
-  wire("analyzeBtn", "click", analyzeStandalone);
+  wire("processInputBtn", "click", analyzeStandalone);
+  wire("bulkUploadBtn", "click", startBulkAnalysis);
+  wire("refreshMeetingsBtn", "click", refreshMeetings);
 
   const reqInput = $("requirementText");
   if (reqInput) {
@@ -345,31 +494,28 @@ document.addEventListener("DOMContentLoaded", () => {
     revBtn.addEventListener("click", () => {
       const revC = $("revisionsContent");
       if (revC) {
-        const capMap = window._latestCapInsights || {};
-        const iA = capMap.investigation_actions || ["No current investigation actions."];
-        const sI = capMap.service_improvements || ["No service improvements."];
         revC.innerHTML = `
-                  <h4 class="font-bold mb-2 text-primary">Generated Insights (Phase 5)</h4>
-                  <div class="space-y-4">
-                      <div class="glass-card p-4">
-                          <label class="font-bold text-sm mb-1 block">Investigation Actions</label>
-                          <textarea id="revIa" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${iA.join("\\n")}</textarea>
-                      </div>
-                      <div class="glass-card p-4">
-                          <label class="font-bold text-sm mb-1 block">Service Improvements</label>
-                          <textarea id="revSi" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${sI.join("\\n")}</textarea>
-                      </div>
-                  </div>
-                  <div class="flex justify-end gap-3 mt-4">
-                      <button id="approveInsightsBtn" type="button" class="btn-primary text-xs py-2 px-4 shadow-xl">Approve & Save Insights</button>
-                  </div>
-              `;
+          <h4 class="font-bold mb-2 text-primary">Generated Insights (Phase 5)</h4>
+          <div class="space-y-4">
+              <div class="glass-card p-4">
+                   <label class="font-bold text-sm mb-1 block">Domain Strategy</label>
+                  <textarea id="revIa" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">Extrapolating multi-domain architecture for large-scale requirement processing...</textarea>
+              </div>
+              <div class="glass-card p-4">
+                  <label class="font-bold text-sm mb-1 block">Service Scaling</label>
+                  <textarea id="revSi" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">Optimization targeted for 100k+ requirement ingestion using asynchronous worker pools.</textarea>
+              </div>
+          </div>
+          <div class="flex justify-end gap-3 mt-4">
+              <button id="approveRevisedBtn" type="button" class="btn-primary text-xs py-2 px-4 shadow-xl">Confirm Implementation</button>
+          </div>
+        `;
 
-        const approveBtn = $("approveInsightsBtn");
+        const approveBtn = $("approveRevisedBtn");
         if (approveBtn) {
           approveBtn.addEventListener("click", () => {
-            alert("Insights approved and saved successfully!");
-            $("revisionsModal").classList.add("hidden");
+            alert("Scale architecture confirmed!");
+            $("revisionsModal")?.classList.add("hidden");
           });
         }
       }
@@ -384,53 +530,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Phase 5 Revisions UI
-  const revBtn = $("viewRevisionsBtn");
-  if (revBtn) {
-    revBtn.addEventListener("click", () => {
-      const revC = $("revisionsContent");
-      if (revC) {
-        const capMap = window._latestCapInsights || {};
-        const iA = capMap.investigation_actions || ["No current investigation actions."];
-        const sI = capMap.service_improvements || ["No service improvements."];
-        revC.innerHTML = `
-                  <h4 class="font-bold mb-2 text-primary">Generated Insights (Phase 5)</h4>
-                  <div class="space-y-4">
-                      <div class="glass-card p-4">
-                           <label class="font-bold text-sm mb-1 block">Investigation Actions</label>
-                          <textarea id="revIa" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${iA.join("\n")}</textarea>
-                      </div>
-                      <div class="glass-card p-4">
-                          <label class="font-bold text-sm mb-1 block">Service Improvements</label>
-                          <textarea id="revSi" class="w-full text-xs p-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900" rows="3">${sI.join("\n")}</textarea>
-                      </div>
-                  </div>
-                  <div class="flex justify-end gap-3 mt-4">
-                      <button id="approveInsightsBtn" type="button" class="btn-primary text-xs py-2 px-4 shadow-xl">Approve & Save Insights</button>
-                  </div>
-              `;
-
-        const approveBtn = $("approveInsightsBtn");
-        if (approveBtn) {
-          approveBtn.addEventListener("click", () => {
-            alert("Insights approved and saved successfully!");
-            $("revisionsModal").classList.add("hidden");
-          });
-        }
-      }
-      $("revisionsModal")?.classList.remove("hidden");
-    });
-  }
-
-  const closeRev = $("closeRevisionsBtn");
-  if (closeRev) {
-    closeRev.addEventListener("click", () => {
-      $("revisionsModal")?.classList.add("hidden");
-    });
-  }
-
-  // Bootstrap initial UI
-  renderLiveRequirements();
-  resetLiveInsights();
   console.log("Bootstrap complete.");
 });

@@ -4,6 +4,15 @@ console.log("RequiMind Script Loading...");
 // Global state
 let authToken = localStorage.getItem("requimind_token") || "";
 let currentUsername = localStorage.getItem("requimind_user") || "";
+let isRecording = false;
+let mediaRecorder;
+let audioChunks = [];
+
+// Bulk handling state
+let allQuestions = [];
+let filteredQuestions = [];
+let currentQuestionPage = 1;
+const questionsPerPage = 10;
 let meetings = [];
 let currentSegments = [];
 let recognition = null;
@@ -25,6 +34,233 @@ const voiceCapture = {
   recentSamples: [],
   lastSignature: null,
 };
+
+// Speech Recognition Init
+function initSpeechRecognition() {
+  if (recognition) return;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    console.error("Speech Recognition not supported in this browser.");
+    text("audioStatus", "Browser not supported");
+    return;
+  }
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "en-US";
+
+  recognition.onstart = () => {
+    text("audioStatus", "Recording...");
+    $("audioStartBtn").disabled = true;
+    $("audioStopBtn").disabled = false;
+  };
+
+  recognition.onresult = (event) => {
+    let interimTranscript = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        finalTranscript += transcript + " ";
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+    const currentText = val("requirementText");
+    const combined = finalTranscript + interimTranscript;
+    if (combined.trim()) {
+      $("requirementText").value = combined;
+      renderLiveRequirements();
+      scheduleLiveAnalysis();
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech Recognition Error:", event.error);
+    text("audioStatus", `Error: ${event.error}`);
+    handleAudioStop();
+  };
+
+  recognition.onend = () => {
+    text("audioStatus", "Stopped");
+    $("audioStartBtn").disabled = false;
+    $("audioStopBtn").disabled = true;
+  };
+}
+
+function handleAudioStart() {
+  initSpeechRecognition();
+  if (recognition) {
+    finalTranscript = "";
+    recognition.start();
+  }
+}
+
+function handleAudioStop() {
+  if (recognition) {
+    recognition.stop();
+  }
+}
+
+// PDF Extraction
+async function handleUnifiedPdfUpload() {
+  const fileInput = $("minutesPdfUnified");
+  if (!fileInput || !fileInput.files[0]) {
+    alert("Please select a PDF file first.");
+    return;
+  }
+  const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const btn = $("uploadPdfUnifiedBtn");
+  const originalText = btn.textContent;
+  btn.textContent = "Extracting...";
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${getBaseUrl()}/extract/pdf`, {
+      method: "POST",
+      headers: authHeaders(false),
+      body: formData,
+    });
+    if (!res.ok) throw new Error("PDF extraction failed.");
+    const data = await res.json();
+    const existing = val("requirementText");
+    $("requirementText").value = (existing ? existing + "\n\n" : "") + data.text;
+    renderLiveRequirements();
+    scheduleLiveAnalysis();
+    alert("Document extracted successfully!");
+  } catch (e) {
+    setError(e.message);
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+async function handleMeetingPdfUpload() {
+  const meetingId = val("meetingSelect");
+  if (!meetingId) {
+    alert("Please select or create a meeting first.");
+    return;
+  }
+  const fileInput = $("minutesPdf");
+  if (!fileInput || !fileInput.files[0]) {
+    alert("Please select a PDF file.");
+    return;
+  }
+  const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const btn = $("uploadPdfBtn");
+  btn.textContent = "Uploading...";
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${getBaseUrl()}/meetings/${meetingId}/minutes/pdf`, {
+      method: "POST",
+      headers: authHeaders(false),
+      body: formData,
+    });
+    if (!res.ok) throw new Error("Meeting PDF upload failed.");
+    const data = await res.json();
+    alert(`Uploaded! Extracted ${data.chars} characters.`);
+    selectMeeting(); // Refresh UI
+  } catch (e) {
+    setError(e.message);
+  } finally {
+    btn.textContent = "Upload PDF";
+    btn.disabled = false;
+  }
+}
+
+// Meeting Management
+async function refreshMeetings() {
+  try {
+    const res = await fetch(`${getBaseUrl()}/meetings`, {
+      headers: authHeaders(),
+    });
+    if (!res.ok) throw new Error("Failed to fetch meetings.");
+    meetings = await res.json();
+    const select = $("meetingSelect");
+    if (!select) return;
+    const currentVal = select.value;
+    select.innerHTML = '<option value="">-- Select Meeting --</option>';
+    meetings.forEach((m) => {
+      const opt = document.createElement("option");
+      opt.value = m.id;
+      opt.textContent = m.title;
+      select.appendChild(opt);
+    });
+    if (currentVal) select.value = currentVal;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function createMeeting() {
+  const title = val("meetingTitle");
+  if (!title) {
+    alert("Please enter a meeting title.");
+    return;
+  }
+  try {
+    const res = await fetch(`${getBaseUrl()}/meetings`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ title }),
+    });
+    if (!res.ok) throw new Error("Failed to create meeting.");
+    const meeting = await res.json();
+    $("meetingTitle").value = "";
+    await refreshMeetings();
+    $("meetingSelect").value = meeting.id;
+    selectMeeting();
+  } catch (e) {
+    setError(e.message);
+  }
+}
+
+async function selectMeeting() {
+  const id = val("meetingSelect");
+  if (!id) return;
+  try {
+    const res = await fetch(`${getBaseUrl()}/meetings/${id}`, {
+      headers: authHeaders(),
+    });
+    if (!res.ok) throw new Error("Failed to fetch meeting details.");
+    const meeting = await res.json();
+    
+    // Update dashboard with meeting data
+    if (meeting.analysis_history && meeting.analysis_history.length > 0) {
+        const lastAnalysis = meeting.analysis_history[meeting.analysis_history.length - 1].analysis;
+        // Map backend history format to frontend render format
+        renderAnalysis({
+            status: lastAnalysis.status,
+            message: lastAnalysis.message,
+            domains: lastAnalysis.domains,
+            questions: lastAnalysis.questions,
+            item_analyses: [], // Not stored in history currently
+            capability_insights: {
+                sprint_plan: lastAnalysis.sprint_plan,
+                proprietary_tool_suggestions: lastAnalysis.proprietary_tool_suggestions
+            }
+        });
+    }
+  } catch (e) {
+    setError(e.message);
+  }
+}
+
+async function downloadTranscript() {
+  const id = val("meetingSelect");
+  if (!id) {
+    alert("Select a meeting first.");
+    return;
+  }
+  window.open(`${getBaseUrl()}/meetings/${id}/transcript`, "_blank");
+}
 
 // Helper: safe element selection
 function $(id) {
@@ -222,6 +458,109 @@ function scheduleLiveAnalysis() {
 // Render Results Wizard
 let lastAnalyzedData = null;
 
+// --- QUESTION RENDERING WITH BULK SUPPORT ---
+function renderQuestions() {
+    const list = document.getElementById('questionsList');
+    if (!list) return;
+
+    // Apply search filter
+    const searchTerm = document.getElementById('questionSearch')?.value.toLowerCase() || '';
+    filteredQuestions = allQuestions.filter(q => 
+        q.requirement.toLowerCase().includes(searchTerm) || 
+        q.question.toLowerCase().includes(searchTerm)
+    );
+
+    // Calculate pagination
+    const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage) || 1;
+    if (currentQuestionPage > totalPages) currentQuestionPage = totalPages;
+    
+    const start = (currentQuestionPage - 1) * questionsPerPage;
+    const end = start + questionsPerPage;
+    const pageItems = filteredQuestions.slice(start, end);
+
+    // Update UI controls
+    const pageInfo = document.getElementById('pageInfo');
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+    
+    if (pageInfo) pageInfo.textContent = `Page ${currentQuestionPage}/${totalPages}`;
+    if (prevBtn) prevBtn.disabled = currentQuestionPage <= 1;
+    if (nextBtn) nextBtn.disabled = currentQuestionPage >= totalPages;
+
+    // Render cards
+    list.innerHTML = pageItems.map((q, idx) => `
+        <div class="card p-5 border-l-4 border-l-indigo-500 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start mb-3">
+                <span class="badge badge-indigo">Question ${start + idx + 1}</span>
+                <span class="text-xs font-mono text-slate-400">ID: ${q.id?.substring(0, 8) || 'N/A'}</span>
+            </div>
+            <div class="mb-4">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Requirement Source</p>
+                <p class="text-sm font-medium text-slate-700 italic">"${q.requirement}"</p>
+            </div>
+            <div class="mb-4">
+                <p class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-1">AI Inquiry</p>
+                <p class="text-base text-slate-800 font-semibold">${q.question}</p>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" class="flex-1 text-sm py-2" placeholder="Provide clarity here..." 
+                       id="ans-${q.id}" onchange="updateAnswer('${q.id}', this.value)">
+                <button class="btn-primary py-2 px-4 text-sm" onclick="submitSingleAnswer('${q.id}')">
+                    <span class="material-symbols-outlined text-sm">check</span>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Global scope helpers for onclick
+window.updateAnswer = (id, val) => {
+    const q = allQuestions.find(it => it.id === id);
+    if (q) q.answer = val;
+};
+
+window.submitSingleAnswer = (id) => {
+    const q = allQuestions.find(it => it.id === id);
+    if (!q || !q.answer) {
+        showStatus('Please provide an answer first.', 'error');
+        return;
+    }
+    // Logic to submit answer would go here
+    showStatus('Answer recorded locally. Use "Resolve Ambiguities" to batch process.', 'success');
+};
+
+function initBulkListeners() {
+    const searchInput = document.getElementById('questionSearch');
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            currentQuestionPage = 1;
+            renderQuestions();
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionPage > 1) {
+                currentQuestionPage--;
+                renderQuestions();
+            }
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+            if (currentQuestionPage < totalPages) {
+                currentQuestionPage++;
+                renderQuestions();
+            }
+        });
+    }
+}
+
 function renderAnalysis(data) {
   lastAnalyzedData = data;
 
@@ -385,6 +724,13 @@ async function analyzeStandalone() {
     });
     if (!res.ok) throw new Error(`Analysis failed (${res.status})`);
     const data = await res.json();
+    allQuestions = data.questions || [];
+    currentQuestionPage = 1;
+    renderQuestions();
+    
+    // Switch to Step 2 smoothly
+    switchStep(2);
+    showStatus('Requirement analysis complete. Please review ambiguities.', 'success');
     renderAnalysis(data);
   } finally {
     if (processBtn) processBtn.textContent = "Process Requirements";
@@ -451,6 +797,19 @@ document.addEventListener("DOMContentLoaded", () => {
     $("requirementText").value = "";
   });
 
+  wire("audioStartBtn", "click", handleAudioStart);
+  wire("audioStopBtn", "click", handleAudioStop);
+  wire("uploadPdfUnifiedBtn", "click", handleUnifiedPdfUpload);
+  wire("uploadPdfBtn", "click", handleMeetingPdfUpload);
+  wire("refreshMeetingsBtn", "click", refreshMeetings);
+  wire("createMeetingBtn", "click", createMeeting);
+  wire("downloadTranscriptBtn", "click", downloadTranscript);
+  
+  const mSelect = $("meetingSelect");
+  if (mSelect) {
+    mSelect.addEventListener("change", selectMeeting);
+  }
+
   wire("notFeasibleBtn", "click", () => {
     alert("Sprint load not feasible. We will generate an alternate plan (Simulated).");
   });
@@ -503,7 +862,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeRev = $("closeRevisionsBtn");
   if (closeRev) {
     closeRev.addEventListener("click", () => {
-      $("revisionsModal")?.classList.add("hidden");
+      $("revisionsModal")?.classList.remove("hidden");
     });
   }
 
@@ -581,9 +940,11 @@ document.addEventListener("DOMContentLoaded", () => {
   wire("logoutBtn", "click", logout);
 
   // Bootstrap initial UI
+    initSpeechRecognition();
+    initBulkListeners();
+    refreshMeetings();
   updateAuthUI();
   renderLiveRequirements();
   resetLiveInsights();
   console.log("Bootstrap complete.");
 });
-
